@@ -1,0 +1,46 @@
+@import '../../utils/_colors.scss';
+
+._login_main_container{
+    overflow-y: hidden;
+
+    ._logo_main_container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40%;
+        background-color: $secondary;
+        @media (max-width:767px) {
+            display: none;
+        }
+        ._app_logo{
+            width: 20%;
+        }
+    }
+    ._login_form_container{
+        @media (max-width:767px) {
+            width:100%
+        }
+        width: 60%;
+        position: relative;
+        // text-align: center;
+        overflow-y: auto;
+
+        ._form_container{
+
+            @media (max-width:767px) {
+                margin:5% auto;
+                width: 80%;
+            }
+            position: relative;
+            left: 0;
+            right: 0;
+            width: 400px;
+            margin: 15% auto;
+            h4{
+                font-size: 42px;
+                color:$dark;   
+            }
+        }
+
+    }
+}

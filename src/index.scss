@@ -1,0 +1,32 @@
+html{
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  #root{
+    height: 100%;
+  }
+  // background-color: #efefef;
+  font-family:'Work Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  h1,h2,h3,h4,h5,h6{
+    margin: 0;
+    padding: 0;
+  }
+
+  p,span{
+    margin: 0;
+    padding:0;
+  }
+
+
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
