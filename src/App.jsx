@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Home from './screens/Home/Home'
 import Login from './screens/Login/Login'
 import Signup from './screens/Signup/Signup'
+import Test from './screens/Test/Test';
 
 
 // import firebase from "./services/firebase"
@@ -32,6 +33,10 @@ function App() {
 
           <Route path="/signup" exact>
             <Signup />
+          </Route>
+
+          <Route path="/test-route" exact>
+            <Test />
           </Route>
 
         </Switch>

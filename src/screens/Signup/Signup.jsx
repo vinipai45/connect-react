@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { useHistory } from 'react-router-dom';
 import { Box, Typography } from '@mui/material'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import FaceIcon from '@mui/icons-material/Face';
@@ -7,15 +7,21 @@ import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
 
 import './Signup.scss';
-import GooglePNG from '../../assets/google.png';
+// import GooglePNG from '../../assets/google.png';
 import colors from '../../utils/_colors.scss';
 import IconButton from '../../components/IconButton';
-import ORComponent from '../../components/ORComponent';
+// import ORComponent from '../../components/ORComponent';
 import IconTextField from '../../components/IconTextField';
 import Footer from '../../components/Footer/Footer';
 
 
 const Signup = () => {
+
+    let history = useHistory()
+
+    const handleLoginClick = () => {
+        history.push('/login')
+    }
 
     return (
         <Box style={{ width: '100%', height: '100%', display: 'flex' }} className="_signup_main_container">
@@ -23,7 +29,19 @@ const Signup = () => {
             <Box className="_signup_form_container">
                 <div className='_form_container'>
                     <h4>Get started with Connect.</h4>
-                    <p style={{ color: `${colors.textGrey}` }}>Already have an account ? <Link to="/login">Login</Link></p>
+                    <p style={{ color: `${colors.textGrey}` }}>
+                        Already have an account ?
+                        <span
+                            style={{
+                                color: `${colors.secondaryColor}`,
+                                fontWeight: 'bold',
+                                cursor: 'pointer'
+                            }}
+                            onClick={handleLoginClick}
+                        >
+                            Login
+                        </span>
+                    </p>
                     <IconTextField
                         label="Name"
                         type="text"

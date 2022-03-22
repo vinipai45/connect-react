@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useHistory } from 'react-router-dom';
 import { Box, Typography } from '@mui/material'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import LockIcon from '@mui/icons-material/Lock';
@@ -13,6 +14,12 @@ import Footer from '../../components/Footer/Footer';
 
 
 const Login = () => {
+
+    let history = useHistory()
+
+    const handleRegisterClick = () => {
+        history.push('/signup')
+    }
 
     return (
         <Box style={{ width: '100%', height: '100%', display: 'flex' }} className="_login_main_container">
@@ -71,11 +78,15 @@ const Login = () => {
                         <Typography
                             sx={{ float: 'right' }}>
                             Don't have an account?
-                            <span style={{
-                                color: `${colors.primaryColor}`,
-                                fontWeight: 'bold',
-                                cursor: 'pointer',
-                            }}> Register
+                            <span
+                                style={{
+                                    color: `${colors.primaryColor}`,
+                                    fontWeight: 'bold',
+                                    cursor: 'pointer',
+                                }}
+                                onClick={handleRegisterClick}
+                            >
+                                Register
                             </span>
                         </Typography>
                     </Box>
