@@ -2,7 +2,9 @@ import React from 'react'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles';
 
-const IconButton = ({ textColor, fontSize, textCapital, backgroundColor, hoverBackgroundColor, startIcon, title, sx, variant }) => {
+import './IconButton.scss'
+
+const IconButton = ({ textColor, fontSize, textCapital, backgroundColor, hoverBackgroundColor, startIcon, title, sx, variant, onClick }) => {
 
     const ColorButton = styled(Button)(({ theme }) => ({
         fontSize: fontSize,
@@ -23,6 +25,7 @@ const IconButton = ({ textColor, fontSize, textCapital, backgroundColor, hoverBa
             sx={sx}
             variant={variant}
             startIcon={startIcon}
+            onClick={onClick}
         >
             {title}
         </ColorButton>

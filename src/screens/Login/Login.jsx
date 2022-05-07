@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
 import { Box, Typography } from '@mui/material'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
@@ -7,18 +7,37 @@ import LockIcon from '@mui/icons-material/Lock';
 import './Login.scss';
 import GooglePNG from '../../assets/google.png';
 import colors from '../../utils/_colors.scss';
-import IconButton from '../../components/IconButton';
+import IconButton from '../../components/IconButton/IconButton';
 import ORComponent from '../../components/ORComponent';
-import IconTextField from '../../components/IconTextField';
+import IconTextField from '../../components/IconTextField/IconTextField';
 import Footer from '../../components/Footer/Footer';
 
 
 const Login = () => {
 
+
+    let initial = {
+        email: "",
+        password: ""
+    }
+
+    const [inputs, setInputs] = useState(initial)
+
     let history = useHistory()
 
     const handleRegisterClick = () => {
         history.push('/signup')
+    }
+
+    const handleOnChange = (e) => {
+        setInputs({
+            ...inputs,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleLogin = () => {
+        console.log(inputs, "inputs")
     }
 
     return (
@@ -45,14 +64,20 @@ const Login = () => {
                     />
                     <ORComponent />
                     <IconTextField
+                        name="email"
+                        value={inputs.email && inputs.email}
                         label="Email"
                         type="email"
+                        onChange={handleOnChange}
                         iconComponent={<AlternateEmailIcon sx={{ color: `${colors.textGrey}`, m: 1, fontSize: '30px' }} />}
                     />
                     <IconTextField
                         style={{ marginBottom: '10px' }}
+                        name="password"
+                        value={inputs.password && inputs.password}
                         label="Password"
                         type="password"
+                        onChange={handleOnChange}
                         iconComponent={<LockIcon sx={{ color: `${colors.textGrey}`, m: 1, fontSize: '30px' }} />}
                     />
                     <Typography
@@ -71,6 +96,7 @@ const Login = () => {
                         fontSize="18px"
                         backgroundColor={colors.primaryColor}
                         hoverBackgroundColor={colors.primaryColor}
+                        onClick={handleLogin}
                         title="Login"
                         variant="contained"
                     />
