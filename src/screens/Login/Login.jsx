@@ -101,7 +101,7 @@ const Login = () => {
             let isNewUser = googleLoggedInUser?.additionalUserInfo?.isNewUser
 
             if (isNewUser) {
-                savedUser = await firebase
+                await firebase
                     .firestore()
                     .collection("users")
                     .doc(googleLoggedInUser.user.uid)
