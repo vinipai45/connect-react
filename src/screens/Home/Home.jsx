@@ -1,13 +1,21 @@
 import React, { useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+
+import { isUserLoggedIn } from '../../helper-functions/checkUserLoggedIn'
+
 
 const Home = () => {
-
-    const history = useHistory()
+    let navigate = useNavigate()
 
     useEffect(() => {
-        history.push('/login')
-    }, [history])
+
+        if (!isUserLoggedIn()) {
+            navigate('/login')
+        }
+
+
+
+    }, [])
 
     return (
         <div>

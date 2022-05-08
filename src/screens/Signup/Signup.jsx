@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import FaceIcon from '@mui/icons-material/Face';
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import './Signup.scss';
+import { firebase } from "../../services/firebase"
+
 import colors from '../../utils/_colors.scss';
 import IconButton from '../../components/IconButton/IconButton';
 import IconTextField from '../../components/IconTextField/IconTextField';
 import Footer from '../../components/Footer/Footer';
+import AppSnackBar from '../../components/AppSnackBar/AppSnackBar';
 
 
 const Signup = () => {
@@ -23,11 +27,14 @@ const Signup = () => {
         confirm_password: ""
     }
     const [inputs, setInputs] = useState(initial)
+    const [error, setError] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
+    const [openSnackBar, setOpenSnackBar] = useState(false)
 
-    let history = useHistory()
+    let navigate = useNavigate()
 
     const handleLoginClick = () => {
-        history.push('/login')
+        navigate('/login')
     }
 
     const handleInputChange = (e) => {
@@ -37,8 +44,55 @@ const Signup = () => {
         })
     }
 
-    const handleSubmit = () => {
-        console.log(inputs)
+    const handleSubmit = async (event) => {
+        setIsLoading(true)
+        event.preventDefault()
+
+        try {
+
+            if (!firebase) {
+                setOpenSnackBar(true)
+                setError('Firebase Connectivity lost!');
+                setIsLoading(false)
+            }
+
+            let savedUser = await firebase.auth().createUserWithEmailAndPassword(inputs.email, inputs.password)
+
+
+
+            if (savedUser) {
+                savedUser = savedUser.user.multiFactor.user
+                sessionStorage.setItem('Shambu Auth Token', savedUser.accessToken)
+            }
+
+            savedUser = await firebase
+                .firestore()
+                .collection("users")
+                .doc(savedUser.uid)
+                .set({
+                    bio: "",
+                    avatar: "",
+                    email: inputs.email,
+                    name: inputs.name,
+                    username: inputs.username,
+                    role: "user",
+                    gender: ""
+                })
+
+            if (!savedUser) {
+                return
+            }
+
+            navigate('/')
+
+        } catch (error) {
+            if (error.code === 'auth/email-already-in-use') {
+                setError('User already exists');
+                setOpenSnackBar(true)
+            }
+            setIsLoading(false)
+            console.error("error", error);
+        }
     }
 
     return (
@@ -111,23 +165,37 @@ const Signup = () => {
                         }}>
                         Forgot Password?
                     </Typography>
-                    <IconButton
-                        sx={{ margin: '40px auto 20px auto' }}
-                        type="submit"
-                        textCapital={true}
-                        textColor={colors.lightGrey}
-                        fontSize="18px"
-                        backgroundColor={colors.secondaryColor}
-                        hoverBackgroundColor={colors.secondaryColor}
-                        title="Signup"
-                        variant="contained"
-                        onClick={handleSubmit}
-                    />
+                    {
+                        isLoading ?
+                            <Box
+                                sx={{
+                                    margin: '40px auto 20px auto',
+                                    width: '100%',
+                                    textAlign: 'center'
+                                }}
+                            >
+                                <CircularProgress style={{ color: colors.secondaryColor }} />
+                            </Box>
+                            :
+                            <IconButton
+                                sx={{ margin: '10px auto 20px auto' }}
+                                type="submit"
+                                textCapital={true}
+                                textColor={colors.lightGrey}
+                                fontSize="18px"
+                                backgroundColor={colors.secondaryColor}
+                                hoverBackgroundColor={colors.secondaryColor}
+                                title="Signup"
+                                variant="contained"
+                                onClick={handleSubmit}
+                            />
+                    }
+
                 </div>
 
                 <Footer />
 
-            </Box>
+            </Box >
             <Box className="_logo_main_container">
                 <img
                     src={require('../../assets/logo')}
@@ -135,7 +203,17 @@ const Signup = () => {
                     className='_app_logo'
                 />
             </Box>
-        </Box>
+            {
+                openSnackBar ?
+                    <AppSnackBar
+                        type="error"
+                        message={error}
+                        openSnackBar={openSnackBar}
+                        setOpenSnackBar={setOpenSnackBar}
+                    />
+                    : <></>
+            }
+        </Box >
     )
 }
 

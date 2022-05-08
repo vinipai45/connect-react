@@ -1,17 +1,21 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import LockIcon from '@mui/icons-material/Lock';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import './Login.scss';
+import { firebase } from "../../services/firebase"
+import { validateLogin } from "../../validations/Login.validations";
+
 import GooglePNG from '../../assets/google.png';
 import colors from '../../utils/_colors.scss';
 import IconButton from '../../components/IconButton/IconButton';
 import ORComponent from '../../components/ORComponent';
 import IconTextField from '../../components/IconTextField/IconTextField';
 import Footer from '../../components/Footer/Footer';
-
+import AppSnackBar from '../../components/AppSnackBar/AppSnackBar';
 
 const Login = () => {
 
@@ -22,11 +26,15 @@ const Login = () => {
     }
 
     const [inputs, setInputs] = useState(initial)
+    const [openSnackBar, setOpenSnackBar] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
-    let history = useHistory()
+    const [error, setError] = useState("")
+
+    let navigate = useNavigate()
 
     const handleRegisterClick = () => {
-        history.push('/signup')
+        navigate('/signup')
     }
 
     const handleOnChange = (e) => {
@@ -36,9 +44,89 @@ const Login = () => {
         })
     }
 
-    const handleLogin = () => {
-        console.log(inputs, "inputs")
+    const handleLogin = async (event) => {
+        event.preventDefault();
+        setIsLoading(true)
+
+        let resultValidation = validateLogin(inputs);
+
+        if (!resultValidation) {
+            setOpenSnackBar(true)
+            setError("Check your email!")
+            setIsLoading(false)
+            return
+        }
+
+
+        try {
+            if (firebase) {
+                let user = await firebase.auth().signInWithEmailAndPassword(inputs.email, inputs.password)
+
+                if (user) {
+                    console.log(user)
+
+                    sessionStorage.setItem('Shambu Auth Token', user.user.multiFactor.user.accessToken)
+                    navigate('/')
+                }
+            }
+        } catch (error) {
+            setOpenSnackBar(true)
+
+            if (error.code === 'auth/wrong-password') {
+                setError("Invalid Credentials!")
+            }
+            if (error.code === 'auth/user-not-found') {
+                setError('Please check the Email');
+            }
+            setIsLoading(false)
+            console.error("error", error);
+        }
     }
+
+    const handleLoginWithGoogle = async (e) => {
+        try {
+
+            if (!firebase) {
+                return
+            }
+
+            let provider = new firebase.auth.GoogleAuthProvider();
+
+            let googleLoggedInUser = await firebase.auth().signInWithPopup(provider)
+
+            var credential = googleLoggedInUser?.credential;
+
+            var token = credential?.accessToken;
+
+            let isNewUser = googleLoggedInUser?.additionalUserInfo?.isNewUser
+
+            if (isNewUser) {
+                savedUser = await firebase
+                    .firestore()
+                    .collection("users")
+                    .doc(googleLoggedInUser.user.uid)
+                    .set({
+                        bio: "",
+                        avatar: "",
+                        email: googleLoggedInUser.user.email,
+                        name: googleLoggedInUser.user.displayName,
+                        username: inputs.username,
+                        role: "user",
+                        gender: ""
+                    })
+            }
+
+            sessionStorage.setItem("Shambu Auth Token", token)
+
+            sessionStorage.setItem("Shambu User", JSON.stringify(googleLoggedInUser.user))
+
+            navigate('/')
+
+        } catch (error) {
+            console.error(error, "error")
+        }
+    }
+
 
     return (
         <Box style={{ width: '100%', height: '100%', display: 'flex' }} className="_login_main_container">
@@ -61,6 +149,7 @@ const Login = () => {
                         title="Connect With Google"
                         variant="contained"
                         startIcon={<img src={GooglePNG} style={{ height: '30px', width: '30px' }} alt="google png" />}
+                        onClick={handleLoginWithGoogle}
                     />
                     <ORComponent />
                     <IconTextField
@@ -89,17 +178,30 @@ const Login = () => {
                         }}>
                         Forgot Password?
                     </Typography>
-                    <IconButton
-                        sx={{ margin: '40px auto 20px auto' }}
-                        textCapital={true}
-                        textColor={colors.lightGrey}
-                        fontSize="18px"
-                        backgroundColor={colors.primaryColor}
-                        hoverBackgroundColor={colors.primaryColor}
-                        onClick={handleLogin}
-                        title="Login"
-                        variant="contained"
-                    />
+                    {
+                        isLoading ?
+                            <Box
+                                sx={{
+                                    margin: '40px auto 20px auto',
+                                    width: '100%',
+                                    textAlign: 'center'
+                                }}
+                            >
+                                <CircularProgress style={{ color: colors.primaryColor }} />
+                            </Box>
+                            : <IconButton
+                                sx={{ margin: '40px auto 20px auto' }}
+                                textCapital={true}
+                                textColor={colors.lightGrey}
+                                fontSize="18px"
+                                backgroundColor={colors.primaryColor}
+                                hoverBackgroundColor={colors.primaryColor}
+                                onClick={handleLogin}
+                                title="Login"
+                                variant="contained"
+                            />
+                    }
+
                     <Box>
                         <Typography
                             sx={{ float: 'right' }}>
@@ -121,6 +223,16 @@ const Login = () => {
                 <Footer />
 
             </Box>
+            {
+                openSnackBar ?
+                    <AppSnackBar
+                        type="error"
+                        message={error}
+                        openSnackBar={openSnackBar}
+                        setOpenSnackBar={setOpenSnackBar}
+                    />
+                    : <></>
+            }
         </Box>
     )
 }

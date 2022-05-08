@@ -13,9 +13,9 @@ const IconTextField = ({ iconComponent, label, value, name, onChange, style, typ
                 display: 'flex',
                 alignItems: 'flex-end',
                 backgroundColor: `${colors.lightGrey}`,
-                padding: '5px',
+                padding: '0px',
                 borderRadius: '10px',
-                my: 4
+                my: 3
             }}>
             {iconComponent}
             <TextField

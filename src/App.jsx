@@ -1,45 +1,38 @@
-import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, } from 'react-router-dom';
 
+import PrivateRoute from './helper-functions/PrivateRoute'
 import Home from './screens/Home/Home'
 import Login from './screens/Login/Login'
+import Logout from './screens/Logout/Logout'
 import Signup from './screens/Signup/Signup'
 import Test from './screens/Test/Test';
 
 
-// import firebase from "./services/firebase"
 function App() {
-  // useEffect(() => {
-  //   firebase
-  //     .firestore()
-  //     .collection("notes")
-  //     .add({
-  //       title: "Working",
-  //       body: "This is to check the Integration is working",
-  //     })
-  // })
+
+
+
   return (
     <>
       <BrowserRouter>
-        <Switch>
+        <Routes>
 
-          <Route path="/" exact>
-            <Home />
-          </Route>
+          <Route path="/" element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          } />
 
-          <Route path="/login" exact>
-            <Login />
-          </Route>
+          <Route path="/login" element={<Login />} />
 
-          <Route path="/signup" exact>
-            <Signup />
-          </Route>
+          <Route path="/signup" element={<Signup />} />
 
-          <Route path="/test-route" exact>
-            <Test />
-          </Route>
+          <Route path="/logout" element={<Logout />} />
 
-        </Switch>
+          <Route path="/test-route" element={<Test />} />
+
+        </Routes>
       </BrowserRouter>
     </>
   )
