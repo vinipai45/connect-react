@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
@@ -6,28 +6,38 @@ import FaceIcon from '@mui/icons-material/Face';
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
 import CircularProgress from '@mui/material/CircularProgress';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Tooltip from '@mui/material/Tooltip';
 
 import './Signup.scss';
 import { firebase } from "../../services/firebase"
-
 import colors from '../../utils/_colors.scss';
+import { maleAvatars, femaleAvatars, otherAvatars } from '../../helper-functions/avatars';
+import { validateSignupInputs } from './validations';
+
 import IconButton from '../../components/IconButton/IconButton';
 import IconTextField from '../../components/IconTextField/IconTextField';
 import Footer from '../../components/Footer/Footer';
 import AppSnackBar from '../../components/AppSnackBar/AppSnackBar';
+import getRandomInt from '../../helper-functions/getRandomNumbers';
 
 
 const Signup = () => {
 
     const initial = {
+        avatar: "",
         name: "",
         username: "",
         email: "",
         password: "",
-        confirm_password: ""
+        confirm_password: "",
+        gender: ""
     }
     const [inputs, setInputs] = useState(initial)
     const [error, setError] = useState("")
+    const [inputErrors, setInputErrors] = useState(initial)
     const [isLoading, setIsLoading] = useState(false)
     const [openSnackBar, setOpenSnackBar] = useState(false)
 
@@ -44,9 +54,39 @@ const Signup = () => {
         })
     }
 
+    useEffect(() => {
+        if (inputs.gender == "male") {
+            setInputs({
+                ...inputs,
+                avatar: maleAvatars[getRandomInt(maleAvatars.length)]
+            })
+        }
+        if (inputs.gender == "female") {
+            setInputs({
+                ...inputs,
+                avatar: femaleAvatars[getRandomInt(femaleAvatars.length)]
+            })
+        }
+        if (inputs.gender == "other") {
+            setInputs({
+                ...inputs,
+                avatar: otherAvatars[getRandomInt(otherAvatars.length)]
+            })
+        }
+    }, [inputs.gender])
+
     const handleSubmit = async (event) => {
         setIsLoading(true)
         event.preventDefault()
+
+        let validationErrors = validateSignupInputs(inputs)
+
+        if (validationErrors) {
+            console.log(validationErrors)
+            setInputErrors(validationErrors)
+            setIsLoading(false)
+            return
+        }
 
         try {
 
@@ -57,8 +97,6 @@ const Signup = () => {
             }
 
             let savedUser = await firebase.auth().createUserWithEmailAndPassword(inputs.email, inputs.password)
-
-
 
             if (savedUser) {
                 savedUser = savedUser.user.multiFactor.user
@@ -114,9 +152,12 @@ const Signup = () => {
                             Login
                         </span>
                     </p>
+
                     <IconTextField
                         name="name"
+                        error={inputErrors.name}
                         value={inputs.name}
+                        tooltip="enter atleast 3 characters"
                         label="Name"
                         type="text"
                         onChange={handleInputChange}
@@ -124,7 +165,9 @@ const Signup = () => {
                     />
                     <IconTextField
                         name="username"
+                        error={inputErrors.username}
                         value={inputs.username}
+                        tooltip="enter atleast 5 characters"
                         label="Username"
                         type="text"
                         onChange={handleInputChange}
@@ -132,7 +175,9 @@ const Signup = () => {
                     />
                     <IconTextField
                         name="email"
+                        error={inputErrors.email}
                         value={inputs.email}
+                        tooltip="enter email"
                         label="Email"
                         type="email"
                         onChange={handleInputChange}
@@ -141,7 +186,9 @@ const Signup = () => {
                     <IconTextField
                         style={{ marginBottom: '10px' }}
                         name="password"
+                        error={inputErrors.password}
                         value={inputs.password}
+                        tooltip={<div>atleast one uppercase <br /> atleast one special character <br /> atleast one number</div>}
                         label="Password"
                         type="password"
                         onChange={handleInputChange}
@@ -150,12 +197,32 @@ const Signup = () => {
                     <IconTextField
                         style={{ marginBottom: '10px' }}
                         name="confirm_password"
+                        error={inputErrors.confirm_password}
                         value={inputs.confirm_password}
                         label="Confirm Password"
                         type="password"
                         onChange={handleInputChange}
                         iconComponent={<LockIcon sx={{ color: `${colors.textGrey}`, m: 1, fontSize: '30px' }} />}
                     />
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography sx={{ marginRight: '20px', color: colors.textGrey }} >
+                            I am
+                        </Typography>
+                        <RadioGroup
+                            row
+                            name="gender"
+                            value={inputs.gender}
+                            onClick={handleInputChange}
+                        >
+                            <FormControlLabel sx={{ color: colors.textGrey }} value="female" control={<Radio className="_radio_button" />} label="Female" />
+                            <FormControlLabel sx={{ color: colors.textGrey }} value="male" control={<Radio className="_radio_button" />} label="Male" />
+                            <FormControlLabel sx={{ color: colors.textGrey }} value="other" control={<Radio className="_radio_button" />} label="Other" />
+
+                        </RadioGroup>
+                    </Box>
+
+
+
                     <Typography
                         sx={{
                             float: 'right',
@@ -180,7 +247,6 @@ const Signup = () => {
                             <IconButton
                                 sx={{ margin: '10px auto 20px auto' }}
                                 type="submit"
-                                textCapital={true}
                                 textColor={colors.lightGrey}
                                 fontSize="18px"
                                 backgroundColor={colors.secondaryColor}

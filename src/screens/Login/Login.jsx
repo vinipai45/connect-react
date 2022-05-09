@@ -9,6 +9,7 @@ import './Login.scss';
 import { firebase } from "../../services/firebase"
 import { validateLogin } from "../../validations/Login.validations";
 
+import { firebaseExceptionHandler } from '../../services/FirebaseExceptionHandler'
 import GooglePNG from '../../assets/google.png';
 import colors from '../../utils/_colors.scss';
 import IconButton from '../../components/IconButton/IconButton';
@@ -71,15 +72,9 @@ const Login = () => {
             }
         } catch (error) {
             setOpenSnackBar(true)
-
-            if (error.code === 'auth/wrong-password') {
-                setError("Invalid Credentials!")
-            }
-            if (error.code === 'auth/user-not-found') {
-                setError('Please check the Email');
-            }
+            let errorMessage = firebaseExceptionHandler(error.code)
+            setError(errorMessage);
             setIsLoading(false)
-            console.error("error", error);
         }
     }
 

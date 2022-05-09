@@ -1,6 +1,9 @@
 @import '../../utils/_colors.scss';
 
 ._icon_text_field {
+
+
+
     label {
         color: $textGrey;
         font-family: 'Work Sans';
@@ -14,6 +17,11 @@
     .MuiInput-underline:after {
         border-bottom-color: $textGrey;
     }
+
+    .MuiInput-input {
+        font-family: 'Work Sans';
+    }
+
 
     MuiOutlinedInput-root {
         Mui-focused fieldset {

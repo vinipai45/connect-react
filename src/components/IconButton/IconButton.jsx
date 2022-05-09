@@ -12,7 +12,7 @@ const IconButton = ({ textColor, fontSize, textCapital, backgroundColor, hoverBa
         fontWeight: 'bolder',
         color: textColor,
         backgroundColor: backgroundColor,
-        textTransform: textCapital ? 'uppercase' : 'capitalize',
+        textTransform: textCapital ? 'uppercase' : 'lowercase',
         width: "100%",
         '&:hover': {
             backgroundColor: hoverBackgroundColor,

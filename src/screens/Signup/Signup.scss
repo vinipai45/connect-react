@@ -47,6 +47,15 @@
                 color: $dark;
             }
 
+            ._radio_button {
+
+                color: $textGrey;
+
+                .Mui-checked {
+                    color: $secondary;
+                }
+            }
+
 
         }
 
