@@ -16,6 +16,7 @@ import { firebase } from "../../services/firebase"
 import { firebaseExceptionHandler } from '../../services/FirebaseExceptionHandler'
 import Authentication from '../../services/Authentication/Auntentication';
 import { getRandomAvatar } from '../../helper-functions/avatars';
+import { validateSignupInputs } from '../../validations/signup.validations';
 
 import IconButton from '../../components/IconButton/IconButton';
 import IconTextField from '../../components/IconTextField/IconTextField';
@@ -68,6 +69,14 @@ const Signup = () => {
         setIsLoading(true)
         event.preventDefault()
         try {
+
+            let errors = await validateSignupInputs(inputs)
+
+            if (!errors.isValid) {
+                setInputErrors(errors.error)
+                setIsLoading(false)
+                return
+            }
 
             let authUser = await authentication.createUserWithEmailAndPassword(inputs)
 

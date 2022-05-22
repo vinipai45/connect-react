@@ -50,8 +50,15 @@ const IconTextField = ({ iconComponent, label, value, name, onChange, style, typ
                         variant="standard"
                     />
 
+
                 </Tooltip>
+
             </Box>
+            {
+                error ?
+                    <span style={{ color: 'red', fontSize: '12px', marginLeft: '10px' }} >{error}</span>
+                    : <></>
+            }
         </>
 
     )
