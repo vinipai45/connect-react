@@ -7,7 +7,7 @@ const firebaseExceptionHandler = (code) => {
         case "auth/email-already-in-use":
             return "user already exists!"
         default:
-            return "Something went wrong!"
+            return "something went wrong"
     }
 }
 

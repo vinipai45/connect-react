@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { auth_token, auth_user } from '../../utils/constants'
 
 const Logout = () => {
 
@@ -7,10 +8,10 @@ const Logout = () => {
 
 
     useEffect(() => {
-        sessionStorage.removeItem("Shambu Auth Token")
-        sessionStorage.removeItem("Shambu User")
+        localStorage.removeItem(auth_token)
+        localStorage.removeItem(auth_user)
         navigate('/')
-    }, [])
+    }, [navigate])
 
     return (
         <></>

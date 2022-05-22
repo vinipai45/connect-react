@@ -13,7 +13,7 @@ export default function AppSnackBar({ type, message, openSnackBar, setOpenSnackB
         setTimeout(() => {
             setOpenSnackBar(false)
         }, 3000)
-    }, [])
+    }, [setOpenSnackBar])
 
     return (
         <div>

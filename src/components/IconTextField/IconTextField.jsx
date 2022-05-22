@@ -1,27 +1,42 @@
 import React from 'react'
 import { Box, TextField, Tooltip } from '@mui/material'
+import Zoom from '@mui/material/Zoom';
+
+import ErrorTooltip from '../ErrorTooltip/ErrorTooltip'
+
 import colors from '../../utils/_colors.scss';
 import './IconTextField.scss'
 
 
 const IconTextField = ({ iconComponent, label, value, name, onChange, style, type = "text", tooltip, error }) => {
-
     return (
         <>
-            <Tooltip title={tooltip}>
-                <Box
-                    style={style}
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'flex-end',
-                        backgroundColor: `${colors.lightGrey}`,
-                        padding: '0px',
-                        borderRadius: '10px',
-                        border: error ? '1px solid red' : {},
-                        my: 1
-                    }}>
-                    {iconComponent}
+
+            <Box
+                style={style}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    backgroundColor: !error ? `${colors.lightGrey}` : {},
+                    padding: '0px',
+                    borderRadius: '30px',
+                    border: error ? '2px solid red' : {},
+                    my: 1
+                }}>
+                {
+                    error ?
+                        <ErrorTooltip
+                            children={iconComponent}
+                            error={error}
+                        >
+                        </ErrorTooltip> : <>{iconComponent}</>
+
+                }
+
+                <Tooltip TransitionComponent={Zoom} title={tooltip}>
                     <TextField
+                        autoComplete='off'
+                        error={error}
                         key={name}
                         className="_icon_text_field"
                         sx={{
@@ -35,9 +50,8 @@ const IconTextField = ({ iconComponent, label, value, name, onChange, style, typ
                         variant="standard"
                     />
 
-                </Box>
-            </Tooltip>
-            {error ? <span style={{ color: 'red', fontSize: '12px' }}>{error && error}</span> : <></>}
+                </Tooltip>
+            </Box>
         </>
 
     )

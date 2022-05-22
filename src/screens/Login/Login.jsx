@@ -6,17 +6,20 @@ import LockIcon from '@mui/icons-material/Lock';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import './Login.scss';
-import { firebase } from "../../services/firebase"
-import { validateLogin } from "../../validations/Login.validations";
+import colors from '../../utils/_colors.scss';
 
 import { firebaseExceptionHandler } from '../../services/FirebaseExceptionHandler'
+import Authentication from '../../services/Authentication/Auntentication';
+
 import GooglePNG from '../../assets/google.png';
-import colors from '../../utils/_colors.scss';
+
 import IconButton from '../../components/IconButton/IconButton';
 import ORComponent from '../../components/ORComponent';
 import IconTextField from '../../components/IconTextField/IconTextField';
 import Footer from '../../components/Footer/Footer';
 import AppSnackBar from '../../components/AppSnackBar/AppSnackBar';
+import { auth_token } from '../../utils/constants';
+
 
 const Login = () => {
 
@@ -27,12 +30,16 @@ const Login = () => {
     }
 
     const [inputs, setInputs] = useState(initial)
+    // const [inputErrors, setInputErrors] = useState(initial)
     const [openSnackBar, setOpenSnackBar] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-
     const [error, setError] = useState("")
 
     let navigate = useNavigate()
+    let authentication = new Authentication()
+
+
+
 
     const handleRegisterClick = () => {
         navigate('/signup')
@@ -46,30 +53,20 @@ const Login = () => {
     }
 
     const handleLogin = async (event) => {
-        event.preventDefault();
-        setIsLoading(true)
-
-        let resultValidation = validateLogin(inputs);
-
-        if (!resultValidation) {
-            setOpenSnackBar(true)
-            setError("Check your email!")
-            setIsLoading(false)
-            return
-        }
-
 
         try {
-            if (firebase) {
-                let user = await firebase.auth().signInWithEmailAndPassword(inputs.email, inputs.password)
 
-                if (user) {
-                    console.log(user)
+            event.preventDefault();
+            setIsLoading(true)
 
-                    sessionStorage.setItem('Shambu Auth Token', user.user.multiFactor.user.accessToken)
-                    navigate('/')
-                }
+            let loggedInUser = await authentication.siginWithEmailAndPassword(inputs)
+
+            if (loggedInUser) {
+                localStorage.setItem(auth_token, loggedInUser.user.multiFactor.user.accessToken)
+                navigate('/')
             }
+
+
         } catch (error) {
             setOpenSnackBar(true)
             let errorMessage = firebaseExceptionHandler(error.code)
@@ -81,39 +78,13 @@ const Login = () => {
     const handleLoginWithGoogle = async (e) => {
         try {
 
-            if (!firebase) {
+            let authUser = await authentication.signinWithGoogle(inputs)
+
+            if (!authUser) {
+                setOpenSnackBar(true)
+                setError("couldnt signin to google");
                 return
             }
-
-            let provider = new firebase.auth.GoogleAuthProvider();
-
-            let googleLoggedInUser = await firebase.auth().signInWithPopup(provider)
-
-            var credential = googleLoggedInUser?.credential;
-
-            var token = credential?.accessToken;
-
-            let isNewUser = googleLoggedInUser?.additionalUserInfo?.isNewUser
-
-            if (isNewUser) {
-                await firebase
-                    .firestore()
-                    .collection("users")
-                    .doc(googleLoggedInUser.user.uid)
-                    .set({
-                        bio: "",
-                        avatar: "",
-                        email: googleLoggedInUser.user.email,
-                        name: googleLoggedInUser.user.displayName,
-                        username: inputs.username,
-                        role: "user",
-                        gender: ""
-                    })
-            }
-
-            sessionStorage.setItem("Shambu Auth Token", token)
-
-            sessionStorage.setItem("Shambu User", JSON.stringify(googleLoggedInUser.user))
 
             navigate('/')
 
@@ -149,20 +120,22 @@ const Login = () => {
                     <ORComponent />
                     <IconTextField
                         name="email"
+                        tooltip="enter email"
                         value={inputs.email && inputs.email}
-                        label="Email"
+                        label="email"
                         type="email"
                         onChange={handleOnChange}
-                        iconComponent={<AlternateEmailIcon sx={{ color: `${colors.textGrey}`, m: 1, fontSize: '30px' }} />}
+                        iconComponent={<AlternateEmailIcon sx={{ color: `${colors.dark}`, m: 1, fontSize: '30px' }} />}
                     />
                     <IconTextField
                         style={{ marginBottom: '10px' }}
                         name="password"
+                        tooltip="enter password"
                         value={inputs.password && inputs.password}
-                        label="Password"
+                        label="password"
                         type="password"
                         onChange={handleOnChange}
-                        iconComponent={<LockIcon sx={{ color: `${colors.textGrey}`, m: 1, fontSize: '30px' }} />}
+                        iconComponent={<LockIcon sx={{ color: `${colors.dark}`, m: 1, fontSize: '30px' }} />}
                     />
                     <Typography
                         sx={{
@@ -171,7 +144,7 @@ const Login = () => {
                             fontWeight: 'bold',
                             cursor: 'pointer',
                         }}>
-                        Forgot Password?
+                        forgot password ?
                     </Typography>
                     {
                         isLoading ?
@@ -186,7 +159,6 @@ const Login = () => {
                             </Box>
                             : <IconButton
                                 sx={{ margin: '40px auto 20px auto' }}
-                                textCapital={true}
                                 textColor={colors.lightGrey}
                                 fontSize="18px"
                                 backgroundColor={colors.primaryColor}
@@ -203,6 +175,7 @@ const Login = () => {
                             Don't have an account?
                             <span
                                 style={{
+                                    marginLeft: '10px',
                                     color: `${colors.primaryColor}`,
                                     fontWeight: 'bold',
                                     cursor: 'pointer',

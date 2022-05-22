@@ -1,9 +1,10 @@
 import {
     Navigate,
 } from "react-router-dom";
+import { auth_token } from "../utils/constants";
 
 const PrivateRoute = ({ children }) => {
-    const auth = sessionStorage.getItem('Shambu Auth Token') || null
+    const auth = localStorage.getItem(auth_token) || null
 
     return auth ? children : <Navigate to="/login" />;
 }

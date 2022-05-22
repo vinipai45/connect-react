@@ -9,20 +9,18 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Tooltip from '@mui/material/Tooltip';
 
 import './Signup.scss';
-import { firebase } from "../../services/firebase"
 import colors from '../../utils/_colors.scss';
-import { maleAvatars, femaleAvatars, otherAvatars } from '../../helper-functions/avatars';
-import { validateSignupInputs } from './validations';
+import { firebase } from "../../services/firebase"
+import { firebaseExceptionHandler } from '../../services/FirebaseExceptionHandler'
+import Authentication from '../../services/Authentication/Auntentication';
+import { getRandomAvatar } from '../../helper-functions/avatars';
 
 import IconButton from '../../components/IconButton/IconButton';
 import IconTextField from '../../components/IconTextField/IconTextField';
 import Footer from '../../components/Footer/Footer';
 import AppSnackBar from '../../components/AppSnackBar/AppSnackBar';
-import getRandomInt from '../../helper-functions/getRandomNumbers';
-
 
 const Signup = () => {
 
@@ -42,6 +40,8 @@ const Signup = () => {
     const [openSnackBar, setOpenSnackBar] = useState(false)
 
     let navigate = useNavigate()
+    let authentication = new Authentication()
+
 
     const handleLoginClick = () => {
         navigate('/login')
@@ -55,81 +55,36 @@ const Signup = () => {
     }
 
     useEffect(() => {
-        if (inputs.gender == "male") {
-            setInputs({
-                ...inputs,
-                avatar: maleAvatars[getRandomInt(maleAvatars.length)]
-            })
-        }
-        if (inputs.gender == "female") {
-            setInputs({
-                ...inputs,
-                avatar: femaleAvatars[getRandomInt(femaleAvatars.length)]
-            })
-        }
-        if (inputs.gender == "other") {
-            setInputs({
-                ...inputs,
-                avatar: otherAvatars[getRandomInt(otherAvatars.length)]
-            })
-        }
+
+        let avatar = getRandomAvatar(inputs.gender)
+        setInputs({
+            ...inputs,
+            avatar: avatar
+        })
+
     }, [inputs.gender])
 
     const handleSubmit = async (event) => {
         setIsLoading(true)
         event.preventDefault()
-
-        let validationErrors = validateSignupInputs(inputs)
-
-        if (validationErrors) {
-            console.log(validationErrors)
-            setInputErrors(validationErrors)
-            setIsLoading(false)
-            return
-        }
-
         try {
 
-            if (!firebase) {
+            let authUser = await authentication.createUserWithEmailAndPassword(inputs)
+
+            if (!authUser) {
                 setOpenSnackBar(true)
-                setError('Firebase Connectivity lost!');
+                setError('couldnt save user');
                 setIsLoading(false)
-            }
-
-            let savedUser = await firebase.auth().createUserWithEmailAndPassword(inputs.email, inputs.password)
-
-            if (savedUser) {
-                savedUser = savedUser.user.multiFactor.user
-                sessionStorage.setItem('Shambu Auth Token', savedUser.accessToken)
-            }
-
-            savedUser = await firebase
-                .firestore()
-                .collection("users")
-                .doc(savedUser.uid)
-                .set({
-                    bio: "",
-                    avatar: "",
-                    email: inputs.email,
-                    name: inputs.name,
-                    username: inputs.username,
-                    role: "user",
-                    gender: ""
-                })
-
-            if (!savedUser) {
-                return
             }
 
             navigate('/')
 
         } catch (error) {
-            if (error.code === 'auth/email-already-in-use') {
-                setError('User already exists');
-                setOpenSnackBar(true)
-            }
+            console.log(error, "error")
+            setOpenSnackBar(true)
+            let errorMessage = firebaseExceptionHandler(error.code)
+            setError(errorMessage);
             setIsLoading(false)
-            console.error("error", error);
         }
     }
 
@@ -161,7 +116,15 @@ const Signup = () => {
                         label="Name"
                         type="text"
                         onChange={handleInputChange}
-                        iconComponent={<PersonIcon sx={{ color: `${colors.textGrey}`, m: 1, fontSize: '30px' }} />}
+                        iconComponent={
+                            <PersonIcon
+                                sx={{
+                                    color: !inputErrors.name ? `${colors.$dark}` : 'red',
+                                    m: 1.5,
+                                    fontSize: '30px'
+                                }}
+                            />
+                        }
                     />
                     <IconTextField
                         name="username"
@@ -171,7 +134,15 @@ const Signup = () => {
                         label="Username"
                         type="text"
                         onChange={handleInputChange}
-                        iconComponent={<FaceIcon sx={{ color: `${colors.textGrey}`, m: 1, fontSize: '30px' }} />}
+                        iconComponent={
+                            <FaceIcon
+                                sx={{
+                                    color: !inputErrors.username ? `${colors.$dark}` : 'red',
+                                    m: 1.5,
+                                    fontSize: '30px'
+                                }}
+                            />
+                        }
                     />
                     <IconTextField
                         name="email"
@@ -181,18 +152,40 @@ const Signup = () => {
                         label="Email"
                         type="email"
                         onChange={handleInputChange}
-                        iconComponent={<AlternateEmailIcon sx={{ color: `${colors.textGrey}`, m: 1, fontSize: '30px' }} />}
+                        iconComponent={
+                            <AlternateEmailIcon
+                                sx={{
+                                    color: !inputErrors.email ? `${colors.$dark}` : 'red',
+                                    m: 1.5,
+                                    fontSize: '30px'
+                                }}
+                            />
+                        }
                     />
                     <IconTextField
                         style={{ marginBottom: '10px' }}
                         name="password"
                         error={inputErrors.password}
                         value={inputs.password}
-                        tooltip={<div>atleast one uppercase <br /> atleast one special character <br /> atleast one number</div>}
+                        tooltip={<div>at least two letters
+                            <br />
+                            at least two numbers
+                            <br />
+                            at least one special character (any special character)
+                            <br />
+                            at least 8 characters</div>}
                         label="Password"
                         type="password"
                         onChange={handleInputChange}
-                        iconComponent={<LockIcon sx={{ color: `${colors.textGrey}`, m: 1, fontSize: '30px' }} />}
+                        iconComponent={
+                            <LockIcon
+                                sx={{
+                                    color: !inputErrors.password ? `${colors.$dark}` : 'red',
+                                    m: 1.5,
+                                    fontSize: '30px'
+                                }}
+                            />
+                        }
                     />
                     <IconTextField
                         style={{ marginBottom: '10px' }}
@@ -202,7 +195,15 @@ const Signup = () => {
                         label="Confirm Password"
                         type="password"
                         onChange={handleInputChange}
-                        iconComponent={<LockIcon sx={{ color: `${colors.textGrey}`, m: 1, fontSize: '30px' }} />}
+                        iconComponent={
+                            <LockIcon
+                                sx={{
+                                    color: !inputErrors.confirm_password ? `${colors.$dark}` : 'red',
+                                    m: 1.5,
+                                    fontSize: '30px'
+                                }}
+                            />
+                        }
                     />
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography sx={{ marginRight: '20px', color: colors.textGrey }} >
@@ -230,7 +231,7 @@ const Signup = () => {
                             fontWeight: 'bold',
                             cursor: 'pointer',
                         }}>
-                        Forgot Password?
+                        forgot password ?
                     </Typography>
                     {
                         isLoading ?
