@@ -132,7 +132,16 @@ class Authentication {
         })
     }
 
-
+    async sendPasswordResetEmail(email) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await firebase.auth().sendPasswordResetEmail(email)
+                return resolve(true)
+            } catch (err) {
+                return reject(err)
+            }
+        })
+    }
 }
 
 export default Authentication

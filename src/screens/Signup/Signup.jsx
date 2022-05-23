@@ -22,6 +22,7 @@ import IconButton from '../../components/IconButton/IconButton';
 import IconTextField from '../../components/IconTextField/IconTextField';
 import Footer from '../../components/Footer/Footer';
 import AppSnackBar from '../../components/AppSnackBar/AppSnackBar';
+import { isUserLoggedIn } from '../../helper-functions/checkUserLoggedIn';
 
 const Signup = () => {
 
@@ -64,6 +65,12 @@ const Signup = () => {
         })
 
     }, [inputs.gender])
+
+    useEffect(() => {
+        if (isUserLoggedIn()) {
+            navigate('/')
+        }
+    }, [])
 
     const handleSubmit = async (event) => {
         setIsLoading(true)

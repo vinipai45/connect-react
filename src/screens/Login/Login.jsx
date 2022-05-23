@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import LockIcon from '@mui/icons-material/Lock';
@@ -19,6 +19,7 @@ import IconTextField from '../../components/IconTextField/IconTextField';
 import Footer from '../../components/Footer/Footer';
 import AppSnackBar from '../../components/AppSnackBar/AppSnackBar';
 import { auth_token } from '../../utils/constants';
+import { isUserLoggedIn } from '../../helper-functions/checkUserLoggedIn';
 
 
 const Login = () => {
@@ -38,6 +39,12 @@ const Login = () => {
 
     let navigate = useNavigate()
     let authentication = new Authentication()
+
+    useEffect(() => {
+        if (isUserLoggedIn()) {
+            navigate('/')
+        }
+    }, [])
 
 
 
@@ -94,6 +101,26 @@ const Login = () => {
         }
     }
 
+    const handlePasswordReset = async () => {
+        try {
+            setIsLoading(true)
+            let authEmailSent = await authentication.sendPasswordResetEmail(inputs.email)
+
+            if (authEmailSent) {
+                setOpenSnackBar(true)
+                setIsLoading(false)
+                setIsPasswordResetSelected(false)
+            }
+
+        } catch (error) {
+            setOpenSnackBar(true)
+            let errorMessage = firebaseExceptionHandler(error.code)
+            setError(errorMessage);
+            setIsLoading(false)
+        }
+
+    }
+
 
     return (
         <Box style={{ width: '100%', height: '100%', display: 'flex' }} className="_login_main_container">
@@ -125,17 +152,20 @@ const Login = () => {
                                 name="email"
                                 tooltip="enter email"
                                 value={inputs.email && inputs.email}
-                                label="email"
+                                style={{
+                                    borderRadius: '12px'
+                                }}
+                                label="Email"
                                 type="email"
                                 onChange={handleOnChange}
                                 iconComponent={<AlternateEmailIcon sx={{ color: `${colors.dark}`, m: 1, fontSize: '30px' }} />}
                             />
                             <IconTextField
-                                style={{ marginBottom: '10px' }}
+                                style={{ marginBottom: '10px', borderRadius: '12px' }}
                                 name="password"
                                 tooltip="enter password"
                                 value={inputs.password && inputs.password}
-                                label="password"
+                                label="Password"
                                 type="password"
                                 onChange={handleOnChange}
                                 iconComponent={<LockIcon sx={{ color: `${colors.dark}`, m: 1, fontSize: '30px' }} />}
@@ -192,7 +222,59 @@ const Login = () => {
                                 </Typography>
                             </Box>
                         </div>
-                        : <></>
+                        :
+                        <div className='_form_container'>
+                            <h4>Forgot your Password ?</h4>
+                            <p style={{ color: `${colors.textGrey}` }}>Enter the email associated with your account and we'll send an email with instructions to reset your password</p>
+                            <Box sx={{ mt: 10 }}>
+                                <IconTextField
+                                    name="email"
+                                    tooltip="enter email"
+                                    value={inputs.email && inputs.email}
+                                    style={{
+                                        borderRadius: '12px'
+                                    }}
+                                    label="Enter email"
+                                    type="email"
+                                    onChange={handleOnChange}
+                                    iconComponent={<AlternateEmailIcon sx={{ color: `${colors.dark}`, m: 1, fontSize: '30px' }} />}
+                                />
+                                <Typography
+                                    sx={{
+                                        float: 'right',
+                                        color: `${colors.primaryColor}`,
+                                        fontWeight: 'bold',
+                                        cursor: 'pointer',
+                                    }}
+                                    onClick={() => setIsPasswordResetSelected(false)}
+                                >
+                                    back to login ?
+                                </Typography>
+
+                                {
+                                    isLoading ?
+                                        <Box
+                                            sx={{
+                                                margin: '40px auto 20px auto',
+                                                width: '100%',
+                                                textAlign: 'center'
+                                            }}
+                                        >
+                                            <CircularProgress style={{ color: colors.primaryColor }} />
+                                        </Box>
+                                        : <IconButton
+                                            sx={{ margin: '40px auto 20px auto' }}
+                                            textColor={colors.lightGrey}
+                                            fontSize="18px"
+                                            backgroundColor={colors.primaryColor}
+                                            hoverBackgroundColor={colors.primaryColor}
+                                            onClick={handlePasswordReset}
+                                            title="send"
+                                            variant="contained"
+                                        />
+                                }
+                            </Box>
+                        </div>
                 }
 
                 <Footer />
@@ -201,8 +283,8 @@ const Login = () => {
             {
                 openSnackBar ?
                     <AppSnackBar
-                        type="error"
-                        message={error}
+                        type={error ? "error" : "success"}
+                        message={error ? error : "success"}
                         openSnackBar={openSnackBar}
                         setOpenSnackBar={setOpenSnackBar}
                     />

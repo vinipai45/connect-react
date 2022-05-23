@@ -13,7 +13,6 @@ const IconTextField = ({ iconComponent, label, value, name, onChange, style, typ
         <>
 
             <Box
-                style={style}
                 sx={{
                     display: 'flex',
                     alignItems: 'flex-end',
@@ -22,7 +21,10 @@ const IconTextField = ({ iconComponent, label, value, name, onChange, style, typ
                     borderRadius: '30px',
                     border: error ? '2px solid red' : {},
                     my: 1
-                }}>
+                }}
+                style={style}
+            >
+
                 {
                     error ?
                         <ErrorTooltip

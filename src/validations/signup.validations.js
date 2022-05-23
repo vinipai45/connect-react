@@ -20,28 +20,20 @@ const validatePassword = (password) => {
         );
 }
 
-const validateUsername = async (username) => {
+const validateUsername = (username) => {
 
     if (isEmpty(username) || username.length < 4) {
         return { valid: false, code: 1 }
     }
 
-    let usernameExists = false
-
-    let allUsers = await firebase
+    firebase
         .firestore()
         .collection(USERS)
+        .where("username", "==", username)
         .get()
-
-    allUsers.forEach((user) => {
-        if (`${username}` === `${user.data().username}`) {
-            usernameExists = true
-        }
-    })
-
-    if (usernameExists) {
-        return { valid: false, code: 2 }
-    }
+        .then((res) => {
+            return { valid: false, code: 2 }
+        })
 
     return { valid: true, code: 0 }
 }
