@@ -1,11 +1,13 @@
 const firebaseExceptionHandler = (code) => {
     switch (code) {
         case "auth/wrong-password":
-            return "Invalid Credentials!"
+            return "invalid credentials !"
         case "auth/user-not-found":
-            return "Please check the email!"
+            return "please check the email !"
         case "auth/email-already-in-use":
-            return "user already exists!"
+            return "user already exists !"
+        case "auth/invalid-email":
+            return "invalid email"
         default:
             return code
     }

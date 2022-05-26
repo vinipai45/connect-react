@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Box, Typography } from '@mui/material'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import FaceIcon from '@mui/icons-material/Face';
@@ -12,7 +13,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 import './Signup.scss';
 import colors from '../../utils/_colors.scss';
-import { firebase } from "../../services/firebase"
 import { firebaseExceptionHandler } from '../../services/FirebaseExceptionHandler'
 import Authentication from '../../services/Authentication/Auntentication';
 import { getRandomAvatar } from '../../helper-functions/avatars';
@@ -21,7 +21,6 @@ import { validateSignupInputs } from '../../validations/signup.validations';
 import IconButton from '../../components/IconButton/IconButton';
 import IconTextField from '../../components/IconTextField/IconTextField';
 import Footer from '../../components/Footer/Footer';
-import AppSnackBar from '../../components/AppSnackBar/AppSnackBar';
 import { isUserLoggedIn } from '../../helper-functions/checkUserLoggedIn';
 
 const Signup = () => {
@@ -36,12 +35,13 @@ const Signup = () => {
         gender: ""
     }
     const [inputs, setInputs] = useState(initial)
-    const [error, setError] = useState("")
     const [inputErrors, setInputErrors] = useState(initial)
     const [isLoading, setIsLoading] = useState(false)
-    const [openSnackBar, setOpenSnackBar] = useState(false)
 
     let navigate = useNavigate()
+
+    let Toast = useSelector((s) => s.toast);
+
     let authentication = new Authentication()
 
 
@@ -88,18 +88,21 @@ const Signup = () => {
             let authUser = await authentication.createUserWithEmailAndPassword(inputs)
 
             if (!authUser) {
-                setOpenSnackBar(true)
-                setError('couldnt save user');
+                Toast.fire({
+                    icon: 'error',
+                    title: `could not save user`
+                })
                 setIsLoading(false)
             }
 
-            navigate('/')
+            navigate('/login')
 
         } catch (error) {
-            console.log(error, "error")
-            setOpenSnackBar(true)
             let errorMessage = firebaseExceptionHandler(error.code)
-            setError(errorMessage);
+            Toast.fire({
+                icon: 'error',
+                title: `${errorMessage}`
+            })
             setIsLoading(false)
         }
     }
@@ -226,6 +229,7 @@ const Signup = () => {
                             I am
                         </Typography>
                         <RadioGroup
+
                             row
                             name="gender"
                             value={inputs.gender}
@@ -237,11 +241,14 @@ const Signup = () => {
 
                         </RadioGroup>
                     </Box>
+                    {inputErrors.gender ? <span style={{ color: 'red', fontSize: '12px', marginLeft: '10px', }} >{inputErrors.gender}</span> : <></>}
+
 
 
 
                     <Typography
                         sx={{
+                            mt: 3,
                             float: 'right',
                             color: `${colors.secondaryColor}`,
                             fontWeight: 'bold',
@@ -286,16 +293,6 @@ const Signup = () => {
                     className='_app_logo'
                 />
             </Box>
-            {
-                openSnackBar ?
-                    <AppSnackBar
-                        type="error"
-                        message={error}
-                        openSnackBar={openSnackBar}
-                        setOpenSnackBar={setOpenSnackBar}
-                    />
-                    : <></>
-            }
         </Box >
     )
 }

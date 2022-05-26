@@ -30,32 +30,28 @@ class Authentication {
 
                 let isNewUser = googleLoggedInUser?.additionalUserInfo?.isNewUser
 
-                let uid = googleLoggedInUser?.user?.uid
+                let uid = googleLoggedInUser.user.multiFactor.user.uid
 
                 let data = {
                     bio: "",
                     avatar: "",
-                    email: googleLoggedInUser.user.email,
-                    name: googleLoggedInUser.user.displayName,
+                    email: googleLoggedInUser.user.multiFactor.user.email,
+                    name: googleLoggedInUser.user.multiFactor.user.displayName,
                     username: inputs.username,
                     role: "user",
                     gender: ""
                 }
 
                 if (isNewUser) {
-
-                    let savedUser = await this.authDB.saveUserToDB(uid, data)
-
-                    if (!savedUser) {
-                        return reject(false)
-                    }
+                    console.log("entered")
+                    await this.authDB.saveUserToDB(uid, data)
 
                 }
 
 
                 localStorage.setItem(auth_token, token)
 
-                localStorage.setItem(auth_user, JSON.stringify(googleLoggedInUser.user))
+                localStorage.setItem(auth_user, JSON.stringify(googleLoggedInUser.user.multiFactor.user))
 
 
                 return resolve(true)
@@ -82,6 +78,10 @@ class Authentication {
                     return reject(false)
                 }
 
+                console.log(user, "user")
+
+                user = user.user.multiFactor.user
+
                 return resolve(user)
 
             } catch (err) {
@@ -99,6 +99,8 @@ class Authentication {
                 }
 
                 let user = await firebase.auth().createUserWithEmailAndPassword(inputs.email, inputs.password)
+
+                // sendEmailVerification(auth.currentUser);
 
                 if (user) {
                     user = user.user.multiFactor.user

@@ -38,7 +38,7 @@ const validateUsername = (username) => {
     return { valid: true, code: 0 }
 }
 
-const validateSignupInputs = async (inputs) => {
+const validateSignupInputs = (inputs) => {
     let isValid = true
     let error = {
         name: "",
@@ -53,9 +53,7 @@ const validateSignupInputs = async (inputs) => {
         error.email = "invalid email"
     }
 
-    let isValidUsername = await validateUsername(inputs.username)
-
-    console.log(isValidUsername)
+    let isValidUsername = validateUsername(inputs.username)
 
     if (isValidUsername.code === 2) {
         isValid = false

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Box, Typography } from '@mui/material'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import LockIcon from '@mui/icons-material/Lock';
@@ -10,6 +11,7 @@ import colors from '../../utils/_colors.scss';
 
 import { firebaseExceptionHandler } from '../../services/FirebaseExceptionHandler'
 import Authentication from '../../services/Authentication/Auntentication';
+import { validateLoginInputs } from '../../validations/login.validations';
 
 import GooglePNG from '../../assets/google.png';
 
@@ -17,8 +19,7 @@ import IconButton from '../../components/IconButton/IconButton';
 import ORComponent from '../../components/ORComponent';
 import IconTextField from '../../components/IconTextField/IconTextField';
 import Footer from '../../components/Footer/Footer';
-import AppSnackBar from '../../components/AppSnackBar/AppSnackBar';
-import { auth_token } from '../../utils/constants';
+import { auth_token, auth_user } from '../../utils/constants';
 import { isUserLoggedIn } from '../../helper-functions/checkUserLoggedIn';
 
 
@@ -31,14 +32,15 @@ const Login = () => {
     }
 
     const [inputs, setInputs] = useState(initial)
-    // const [inputErrors, setInputErrors] = useState(initial)
-    const [openSnackBar, setOpenSnackBar] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [isPasswordResetSelected, setIsPasswordResetSelected] = useState(false)
-    const [error, setError] = useState("")
 
     let navigate = useNavigate()
+
+    let Toast = useSelector((s) => s.toast);
+
     let authentication = new Authentication()
+
 
     useEffect(() => {
         if (isUserLoggedIn()) {
@@ -67,18 +69,34 @@ const Login = () => {
             event.preventDefault();
             setIsLoading(true)
 
+            let errors = await validateLoginInputs(inputs)
+            if (!errors.isValid) {
+                Toast.fire({
+                    icon: 'error',
+                    title: `${errors?.error.message}`
+                })
+                setIsLoading(false)
+                return
+            }
+
+
             let loggedInUser = await authentication.siginWithEmailAndPassword(inputs)
 
+            console.log("loggedInUser", loggedInUser)
+
             if (loggedInUser) {
-                localStorage.setItem(auth_token, loggedInUser.user.multiFactor.user.accessToken)
+                localStorage.setItem(auth_token, loggedInUser.accessToken)
+                localStorage.setItem(auth_user, JSON.stringify(loggedInUser))
                 navigate('/')
             }
 
 
         } catch (error) {
-            setOpenSnackBar(true)
             let errorMessage = firebaseExceptionHandler(error.code)
-            setError(errorMessage);
+            Toast.fire({
+                icon: 'error',
+                title: `${errorMessage}`
+            })
             setIsLoading(false)
         }
     }
@@ -89,8 +107,10 @@ const Login = () => {
             let authUser = await authentication.signinWithGoogle(inputs)
 
             if (!authUser) {
-                setOpenSnackBar(true)
-                setError("couldnt signin to google");
+                Toast.fire({
+                    icon: 'error',
+                    title: `could not connect with google`
+                })
                 return
             }
 
@@ -107,15 +127,20 @@ const Login = () => {
             let authEmailSent = await authentication.sendPasswordResetEmail(inputs.email)
 
             if (authEmailSent) {
-                setOpenSnackBar(true)
+                Toast.fire({
+                    icon: 'success',
+                    title: `success`
+                })
                 setIsLoading(false)
                 setIsPasswordResetSelected(false)
             }
 
         } catch (error) {
-            setOpenSnackBar(true)
             let errorMessage = firebaseExceptionHandler(error.code)
-            setError(errorMessage);
+            Toast.fire({
+                icon: 'error',
+                title: `${errorMessage}`
+            })
             setIsLoading(false)
         }
 
@@ -280,16 +305,6 @@ const Login = () => {
                 <Footer />
 
             </Box>
-            {
-                openSnackBar ?
-                    <AppSnackBar
-                        type={error ? "error" : "success"}
-                        message={error ? error : "success"}
-                        openSnackBar={openSnackBar}
-                        setOpenSnackBar={setOpenSnackBar}
-                    />
-                    : <></>
-            }
         </Box>
     )
 }

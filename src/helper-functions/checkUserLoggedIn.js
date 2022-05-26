@@ -1,9 +1,9 @@
-import { auth_user } from "../utils/constants"
+import { auth_token } from "../utils/constants"
 
 
-const isUserLoggedIn = async () => {
+const isUserLoggedIn = () => {
     try {
-        let authUser = JSON.parse(localStorage.getItem(auth_user))
+        let authUser = localStorage.getItem(auth_token)
 
         if (!authUser) {
             return false
