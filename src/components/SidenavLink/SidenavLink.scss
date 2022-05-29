@@ -1,0 +1,33 @@
+@import '../../utils/_colors.scss';
+
+._sidenav_link {
+    display: flex;
+    align-items: cover;
+    cursor: pointer;
+    border-radius: 30px;
+    padding: 20px 20px;
+
+    &:hover {
+        // background-color: #e8f5fe;
+        // color: #50b7f5;
+        background-color: $lightGrey;
+        color: $secondary;
+        transition: color 100ms ease-out;
+
+        h2 {
+
+            font-weight: 700;
+        }
+    }
+
+    h2 {
+        font-weight: 400;
+        font-size: 20px;
+        margin-right: 20px;
+    }
+
+    ._sidenav_icon {
+        margin-right: 20px;
+    }
+
+}

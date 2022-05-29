@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, } from 'react-router-dom';
 
 import PrivateRoute from './utils/helper-functions/PrivateRoute'
 import NotFound from './components/NotFound/NotFound';
-import Home from './screens/Home/Home'
+import Main from './screens/Main/Main'
 import Login from './screens/Login/Login'
 import Logout from './screens/Logout/Logout'
 import Signup from './screens/Signup/Signup'
@@ -13,8 +13,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 
-
-
   return (
     <>
       <BrowserRouter>
@@ -22,7 +20,7 @@ function App() {
 
           <Route path="/" element={
             <PrivateRoute>
-              <Home />
+              <Main />
             </PrivateRoute>
           } />
 

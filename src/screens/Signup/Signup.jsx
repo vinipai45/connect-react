@@ -70,7 +70,7 @@ const Signup = () => {
         if (isUserLoggedIn()) {
             navigate('/')
         }
-    }, [])
+    }, [navigate])
 
     const handleSubmit = async (event) => {
         setIsLoading(true)

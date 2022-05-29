@@ -46,7 +46,7 @@ const Login = () => {
         if (isUserLoggedIn()) {
             navigate('/')
         }
-    }, [])
+    }, [navigate])
 
 
 

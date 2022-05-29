@@ -2,8 +2,6 @@ import React from 'react'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles';
 
-import './IconButton.scss'
-
 const IconButton = ({ textColor, type, fontSize, textCapital, backgroundColor, hoverBackgroundColor, startIcon, title, sx, variant, onClick }) => {
 
     const ColorButton = styled(Button)(({ theme }) => ({
