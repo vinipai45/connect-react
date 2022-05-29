@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, } from 'react-router-dom';
 
-import PrivateRoute from './helper-functions/PrivateRoute'
+import PrivateRoute from './utils/helper-functions/PrivateRoute'
 import NotFound from './components/NotFound/NotFound';
 import Home from './screens/Home/Home'
 import Login from './screens/Login/Login'

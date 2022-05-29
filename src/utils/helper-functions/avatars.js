@@ -1,4 +1,4 @@
-import getRandomInt from './getRandomInt'
+import { getRandomInt } from './generators'
 
 const maleAvatars = [
     "https://firebasestorage.googleapis.com/v0/b/connect-20112.appspot.com/o/avatar%2Fman1.webp?alt=media&token=912dbf5a-5d1c-4544-bc3f-d70ba8b9f87f",

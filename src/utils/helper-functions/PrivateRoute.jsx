@@ -1,7 +1,7 @@
 import {
     Navigate,
 } from "react-router-dom";
-import { auth_token } from "../utils/constants";
+import { auth_token } from "../constants";
 
 const PrivateRoute = ({ children }) => {
     const auth = localStorage.getItem(auth_token) || null

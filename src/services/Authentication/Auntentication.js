@@ -1,6 +1,7 @@
 import { firebase } from "../../services/firebase"
 import AuthDB from "../Database/auth.db";
 import { auth_token, auth_user } from "../../utils/constants";
+import { generateUsername } from "../../utils/helper-functions/generators";
 
 
 class Authentication {
@@ -30,14 +31,16 @@ class Authentication {
 
                 let isNewUser = googleLoggedInUser?.additionalUserInfo?.isNewUser
 
+                let user = googleLoggedInUser.user.multiFactor.user
+
                 let uid = googleLoggedInUser.user.multiFactor.user.uid
 
                 let data = {
                     bio: "",
-                    avatar: "",
-                    email: googleLoggedInUser.user.multiFactor.user.email,
-                    name: googleLoggedInUser.user.multiFactor.user.displayName,
-                    username: inputs.username,
+                    avatar: user.photoURL,
+                    email: user.email,
+                    name: user.displayName,
+                    username: generateUsername(user.displayName),
                     role: "user",
                     gender: ""
                 }
@@ -54,7 +57,7 @@ class Authentication {
                 localStorage.setItem(auth_user, JSON.stringify(googleLoggedInUser.user.multiFactor.user))
 
 
-                return resolve(true)
+                return resolve(googleLoggedInUser.user.multiFactor.user)
 
             } catch (err) {
                 reject(err)

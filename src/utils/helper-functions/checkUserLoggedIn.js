@@ -1,4 +1,4 @@
-import { auth_token } from "../utils/constants"
+import { auth_token } from "../constants"
 
 
 const isUserLoggedIn = () => {

@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 
 import './IconButton.scss'
 
-const IconButton = ({ textColor, fontSize, textCapital, backgroundColor, hoverBackgroundColor, startIcon, title, sx, variant, onClick }) => {
+const IconButton = ({ textColor, type, fontSize, textCapital, backgroundColor, hoverBackgroundColor, startIcon, title, sx, variant, onClick }) => {
 
     const ColorButton = styled(Button)(({ theme }) => ({
         fontSize: fontSize,
@@ -23,6 +23,7 @@ const IconButton = ({ textColor, fontSize, textCapital, backgroundColor, hoverBa
     return (
         <ColorButton
             sx={sx}
+            type={type}
             variant={variant}
             startIcon={startIcon}
             onClick={onClick}

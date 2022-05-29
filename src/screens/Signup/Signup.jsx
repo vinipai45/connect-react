@@ -15,13 +15,13 @@ import './Signup.scss';
 import colors from '../../utils/_colors.scss';
 import { firebaseExceptionHandler } from '../../services/FirebaseExceptionHandler'
 import Authentication from '../../services/Authentication/Auntentication';
-import { getRandomAvatar } from '../../helper-functions/avatars';
+import { getRandomAvatar } from '../../utils/helper-functions/avatars';
 import { validateSignupInputs } from '../../validations/signup.validations';
 
 import IconButton from '../../components/IconButton/IconButton';
 import IconTextField from '../../components/IconTextField/IconTextField';
 import Footer from '../../components/Footer/Footer';
-import { isUserLoggedIn } from '../../helper-functions/checkUserLoggedIn';
+import { isUserLoggedIn } from '../../utils/helper-functions/checkUserLoggedIn';
 
 const Signup = () => {
 
