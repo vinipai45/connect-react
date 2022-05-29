@@ -9,7 +9,7 @@ class Authentication {
         this.authDB = new AuthDB()
     }
 
-    async signinWithGoogle(inputs) {
+    async signinWithGoogle() {
 
         return new Promise(async (resolve, reject) => {
             try {
@@ -41,6 +41,8 @@ class Authentication {
                     email: user.email,
                     name: user.displayName,
                     username: generateUsername(user.displayName),
+                    followers: 0,
+                    following: 0,
                     role: "user",
                     gender: ""
                 }
@@ -115,6 +117,8 @@ class Authentication {
                     email: inputs.email,
                     name: inputs.name,
                     username: inputs.username,
+                    followers: 0,
+                    following: 0,
                     role: "user",
                     gender: inputs.gender
                 }

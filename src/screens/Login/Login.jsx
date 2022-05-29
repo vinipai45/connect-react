@@ -104,7 +104,7 @@ const Login = () => {
     const handleLoginWithGoogle = async (e) => {
         try {
 
-            let authUser = await authentication.signinWithGoogle(inputs)
+            let authUser = await authentication.signinWithGoogle()
 
             if (!authUser) {
                 Toast.fire({
