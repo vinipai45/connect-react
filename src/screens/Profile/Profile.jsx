@@ -1,8 +1,13 @@
 import React from 'react'
 
-const Profile = () => {
+import './Profile.scss'
+import colors from '../../utils/_colors.scss';
+
+const Profile = ({ width }) => {
   return (
-    <div>Profile</div>
+    <div className='_profile_container'>
+      Profile
+    </div>
   )
 }
 

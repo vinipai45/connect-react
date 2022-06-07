@@ -61,18 +61,20 @@ const bottomNavItems = [
             <HomeIcon className="_bottom_nav_icon" />
         </IconButton>
     },
-    // {
-    //     label: "Explore",
-    //     key: "explore",
-    //     icon: <TagIcon className="_bottom_nav_icon" />
-    // },
     {
-        label: "Notifications",
-        key: "notifications",
+        label: "Explore",
+        key: "explore",
         icon: <IconButton size="large">
-            <NotificationsNoneIcon className="_bottom_nav_icon" />
+            <TagIcon className="_bottom_nav_icon" />
         </IconButton>
     },
+    // {
+    //     label: "Notifications",
+    //     key: "notifications",
+    //     icon: <IconButton size="large">
+    //         <NotificationsNoneIcon className="_bottom_nav_icon" />
+    //     </IconButton>
+    // },
     {
         label: "Messages",
         key: "messages",

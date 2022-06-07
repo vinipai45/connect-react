@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import BottomNav from '../../components/BottomNav/BottomNav';
 import { Sidenav, SidenavMini } from '../../components/Sidenav/Sidenav'
 import View from '../View/View';
+
+import { tabBreakpoint, mobileBreakpoint } from '../../utils/constants';
 // import { useNavigate } from 'react-router-dom'
 
 import './Main.scss'
@@ -12,8 +14,6 @@ const Main = ({ route }) => {
 
     const [active, setActive] = useState('profile')
     const [width, setWidth] = React.useState(window.innerWidth);
-    const tabBreakpoint = 960;
-    const mobileBreakpoint = 480;
 
     useEffect(() => {
         const handleWindowResize = () => setWidth(window.innerWidth)
@@ -33,9 +33,6 @@ const Main = ({ route }) => {
                     boxShadow: `0 0 30px ${colors.lightGrey}`,
                 }}>
                     {
-                        // width < tabBreakpoint &&  ?
-                        // <BottomNav active={active} setActive={setActive} />
-                        // :
                         width < mobileBreakpoint ?
                             <></>
                             :
@@ -46,7 +43,7 @@ const Main = ({ route }) => {
 
                     }
                 </div>
-                <View active={active} />
+                <View active={active} width={width} />
 
 
 
