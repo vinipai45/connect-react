@@ -1,5 +1,17 @@
 @import '../../utils/_colors.scss';
 
+._active_item {
+
+    color: $secondary;
+    transition: color 100ms ease-out;
+    background-color: $lightGrey;
+
+    h2 {
+        font-weight: bold !important;
+    }
+
+}
+
 ._sidenav_link {
     display: flex;
     align-items: cover;

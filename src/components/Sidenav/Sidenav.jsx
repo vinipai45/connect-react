@@ -1,33 +1,54 @@
-import React, { useState } from 'react'
-
+import React, { useEffect } from 'react'
 import SidenavLink from '../SidenavLink/SidenavLink'
-import HomeIcon from '@mui/icons-material/Home';
-import TagIcon from '@mui/icons-material/Tag';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { sideMenuItems } from '../../utils/side-menu-items'
 
 import './Sidenav.scss'
 
-const Sidenav = () => {
+const Sidenav = ({ active, setActive }) => {
 
-    const [activeLink, setActiveLink] = useState("home")
+    const handleActive = (key) => {
+        setActive(key)
+    }
 
     return (
         <div className='_sidenav'>
-            <SidenavLink key="home" text="Home" Icon={HomeIcon} />
-            <SidenavLink key="explore" text="Explore" Icon={TagIcon} />
-            <SidenavLink key="notifications" text="Notifications" Icon={NotificationsNoneIcon} />
-            <SidenavLink key="messages" text="Messages" Icon={ChatBubbleOutlineIcon} />
-            <SidenavLink key="bookmarks" text="Bookmarks" Icon={BookmarkBorderIcon} />
-            <SidenavLink key="lists" text="Lists" Icon={FormatListBulletedIcon} />
-            <SidenavLink key="profile" text="Profile" Icon={PermIdentityIcon} />
-            <SidenavLink key="more" text="More" Icon={MoreHorizIcon} />
+            {
+                sideMenuItems.map((item) => (
+                    <SidenavLink
+                        key={item.key}
+                        className={
+                            active == item.key ? '_active_item' : ''
+                        }
+                        label={item.label}
+                        Icon={item.icon}
+                        onClick={() => handleActive(item.key)} />
+                ))
+            }
         </div>
     )
 }
 
-export default Sidenav
+const SidenavMini = ({ active, setActive }) => {
+
+    const handleActive = (key) => {
+        setActive(key)
+    }
+
+    return (
+        <div className='_sidenav_mini'>
+            {
+                sideMenuItems.map((item) => (
+                    <SidenavLink
+                        key={item.key}
+                        className={
+                            active == item.key ? '_active_item' : ''
+                        }
+                        Icon={item.icon}
+                        onClick={() => handleActive(item.key)} />
+                ))
+            }
+        </div>
+    )
+}
+
+export { Sidenav, SidenavMini }

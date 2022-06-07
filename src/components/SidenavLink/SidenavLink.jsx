@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './SidenavLink.scss'
 
-const SidenavLink = ({ text, Icon }) => {
+const SidenavLink = ({ className, label, Icon, onClick }) => {
+
     return (
-        <div className="_sidenav_link">
-            <Icon className="_sidenav_icon" />
-            <h2>{text}</h2>
+        <div className={'_sidenav_link ' + className} onClick={onClick}>
+            {Icon}
+            <h2>{label}</h2>
         </div>
     )
 }
