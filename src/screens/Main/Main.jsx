@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import BottomNav from '../../components/BottomNav/BottomNav';
 import { Sidenav, SidenavMini } from '../../components/Sidenav/Sidenav'
+import { Outlet } from 'react-router-dom';
 import View from '../View/View';
 
 import { tabBreakpoint, mobileBreakpoint } from '../../utils/constants';
@@ -12,7 +13,7 @@ import colors from '../../utils/_colors.scss';
 const Main = ({ route }) => {
     // let navigate = useNavigate()
 
-    const [active, setActive] = useState('profile')
+    const [active, setActive] = useState('home')
     const [width, setWidth] = React.useState(window.innerWidth);
 
     useEffect(() => {
@@ -43,7 +44,14 @@ const Main = ({ route }) => {
 
                     }
                 </div>
-                <View active={active} width={width} />
+                <div style={{
+                    height: '100%',
+                    width: width < tabBreakpoint ? '100%' : '60%',
+                    // border: '1px solid #000'
+                }}>
+                    <Outlet />
+
+                </div>
 
 
 

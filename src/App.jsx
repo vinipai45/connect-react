@@ -8,9 +8,11 @@ import Login from './screens/Login/Login'
 import Logout from './screens/Logout/Logout'
 import Signup from './screens/Signup/Signup'
 import Test from './screens/Test/Test';
+import Profile from './screens/Profile/Profile';
+import Home from './screens/Home/Home';
+import View from './screens/View/View';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import View from './screens/View/View';
 
 function App() {
 
@@ -19,11 +21,15 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          <Route path="/" element={
+          <Route path='/' element={
             <PrivateRoute>
               <Main />
             </PrivateRoute>
-          } />
+          } >
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/home" element={<Home />} />
+
+          </Route>
 
           <Route path="/login" element={<Login />} />
 

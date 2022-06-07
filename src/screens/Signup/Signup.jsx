@@ -68,7 +68,7 @@ const Signup = () => {
 
     useEffect(() => {
         if (isUserLoggedIn()) {
-            navigate('/')
+            navigate('/home')
         }
     }, [navigate])
 

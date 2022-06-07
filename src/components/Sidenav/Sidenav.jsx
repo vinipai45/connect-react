@@ -1,10 +1,14 @@
 import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import SidenavLink from '../SidenavLink/SidenavLink'
 import { sideMenuItems } from '../../utils/side-menu-items'
 
 import './Sidenav.scss'
 
 const Sidenav = ({ active, setActive }) => {
+
+    const navigate = useNavigate()
 
     const handleActive = (key) => {
         setActive(key)
@@ -21,7 +25,10 @@ const Sidenav = ({ active, setActive }) => {
                         }
                         label={item.label}
                         Icon={item.icon}
-                        onClick={() => handleActive(item.key)} />
+                        onClick={() => {
+                            handleActive(item.key)
+                            navigate(`/${item.key}`)
+                        }} />
                 ))
             }
         </div>
@@ -29,6 +36,8 @@ const Sidenav = ({ active, setActive }) => {
 }
 
 const SidenavMini = ({ active, setActive }) => {
+
+    const navigate = useNavigate()
 
     const handleActive = (key) => {
         setActive(key)
@@ -44,7 +53,10 @@ const SidenavMini = ({ active, setActive }) => {
                             active == item.key ? '_sidenav_active_item' : ''
                         }
                         Icon={item.icon}
-                        onClick={() => handleActive(item.key)} />
+                        onClick={() => {
+                            handleActive(item.key)
+                            navigate(`/${item.key}`)
+                        }} />
                 ))
             }
         </div>

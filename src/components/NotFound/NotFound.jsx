@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import animate from './gsap'
 import './NotFound.scss'
 
@@ -7,6 +8,11 @@ const NotFound = () => {
     useEffect(() => {
         animate()
     }, [])
+
+
+    const navigate = useNavigate()
+
+
     return (
         <div class="container _not_found">
             <div class="row">
@@ -272,7 +278,9 @@ const NotFound = () => {
                         How you got here is a mystery. But you can click the button below
                         to go back to the homepage.
                     </p>
-                    <button class="btn green">HOME</button>
+                    <button onClick={() => {
+                        navigate('/home')
+                    }} class="btn green">HOME</button>
                 </div>
             </div>
         </div >

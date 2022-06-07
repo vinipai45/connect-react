@@ -44,7 +44,7 @@ const Login = () => {
 
     useEffect(() => {
         if (isUserLoggedIn()) {
-            navigate('/')
+            navigate('/home')
         }
     }, [navigate])
 
@@ -87,7 +87,7 @@ const Login = () => {
             if (loggedInUser) {
                 localStorage.setItem(auth_token, loggedInUser.accessToken)
                 localStorage.setItem(auth_user, JSON.stringify(loggedInUser))
-                navigate('/')
+                navigate('/home')
             }
 
 
@@ -114,7 +114,7 @@ const Login = () => {
                 return
             }
 
-            navigate('/')
+            navigate('/home')
 
         } catch (error) {
             console.error(error, "error")
