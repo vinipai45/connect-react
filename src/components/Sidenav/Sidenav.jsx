@@ -17,7 +17,7 @@ const Sidenav = ({ active, setActive }) => {
                     <SidenavLink
                         key={item.key}
                         className={
-                            active == item.key ? '_active_item' : ''
+                            active == item.key ? '_sidenav_active_item' : ''
                         }
                         label={item.label}
                         Icon={item.icon}
@@ -41,7 +41,7 @@ const SidenavMini = ({ active, setActive }) => {
                     <SidenavLink
                         key={item.key}
                         className={
-                            active == item.key ? '_active_item' : ''
+                            active == item.key ? '_sidenav_active_item' : ''
                         }
                         Icon={item.icon}
                         onClick={() => handleActive(item.key)} />

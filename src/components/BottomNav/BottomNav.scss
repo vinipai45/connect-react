@@ -1,0 +1,19 @@
+@import '../../utils/_colors.scss';
+
+._bottom_nav {
+    padding: 10px 10px;
+    box-shadow: 0 -5px 10px $lightGrey;
+    justify-content: space-between;
+    display: flex;
+    position: absolute;
+    width: 100vw;
+    bottom: 0;
+
+
+    ._bottom_nav_icon {
+        color: $dark;
+        margin: 0;
+        font-size: 30px;
+    }
+
+}

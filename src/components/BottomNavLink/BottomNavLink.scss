@@ -1,0 +1,23 @@
+@import '../../utils/_colors.scss';
+
+
+._bottom_nav_active_item {
+
+    ._bottom_nav_icon {
+        color: $secondary;
+        // padding: 10px;
+        transition: color 100ms ease-out;
+        // background-color: $lightGrey;
+
+        h2 {
+            font-weight: bold !important;
+        }
+    }
+
+}
+
+._bottom_nav_link {
+    height: 20%;
+    align-items: cover;
+    cursor: pointer;
+}

@@ -10,6 +10,7 @@ import Signup from './screens/Signup/Signup'
 import Test from './screens/Test/Test';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import View from './screens/View/View';
 
 function App() {
 

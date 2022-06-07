@@ -6,6 +6,7 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { IconButton } from '@mui/material';
 
 import '../components/SidenavLink/SidenavLink.scss'
 
@@ -52,4 +53,55 @@ const sideMenuItems = [
     },
 ]
 
-export { sideMenuItems }
+const bottomNavItems = [
+    {
+        label: "Home",
+        key: "home",
+        icon: <IconButton size="large">
+            <HomeIcon className="_bottom_nav_icon" />
+        </IconButton>
+    },
+    // {
+    //     label: "Explore",
+    //     key: "explore",
+    //     icon: <TagIcon className="_bottom_nav_icon" />
+    // },
+    {
+        label: "Notifications",
+        key: "notifications",
+        icon: <IconButton size="large">
+            <NotificationsNoneIcon className="_bottom_nav_icon" />
+        </IconButton>
+    },
+    {
+        label: "Messages",
+        key: "messages",
+        icon: <IconButton size="large">
+            <ChatBubbleOutlineIcon className="_bottom_nav_icon" />
+        </IconButton>
+    },
+    // {
+    //     label: "Bookmarks",
+    //     key: "bookmarks",
+    //     icon: <BookmarkBorderIcon className="_bottom_nav_icon" />
+    // },
+    // {
+    //     label: "Lists",
+    //     key: "lists",
+    //     icon: <FormatListBulletedIcon className="_bottom_nav_icon" />
+    // },
+    {
+        label: "Profile",
+        key: "profile",
+        icon: <IconButton size="large">
+            <PermIdentityIcon className="_bottom_nav_icon" />
+        </IconButton>
+    },
+    // {
+    //     label: "More",
+    //     key: "more",
+    //     icon: <MoreHorizIcon className="_bottom_nav_icon" />
+    // },
+]
+
+export { sideMenuItems, bottomNavItems }
