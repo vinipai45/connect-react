@@ -1,15 +1,20 @@
-$primary:#4ECDC4;
-$secondary:#FC5C65;
-$textGrey:#8A94A6;
-$lightGrey:#EFEFEF;
-$mediumGrey:#C4C4C4;
-$dark:#252837;
+$primary: #4ECDC4;
+$primary_fade: #A6E6E1;
+$secondary: #FC5C65;
+$textGrey: #8A94A6;
+$lightGrey: #EFEFEF;
+$mediumGrey: #C4C4C4;
+$dark: #252837;
+$white :#fff;
+$primary_fade: #A6E6E1;
 
 :export {
+    primary_fade: $primary_fade;
     primaryColor: $primary;
     secondaryColor: $secondary;
     textGrey: $textGrey;
-    dark:$dark;
-    lightGrey:$lightGrey;
-    mediumGrey:$mediumGrey;
+    dark: $dark;
+    lightGrey: $lightGrey;
+    mediumGrey: $mediumGrey;
+    white: $white;
 }

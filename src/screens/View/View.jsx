@@ -12,7 +12,7 @@ const View = ({ active, width }) => {
         <div style={{
             height: '100%',
             width: width < tabBreakpoint ? '100%' : '60%',
-            border: '1px solid #000'
+            // border: '1px solid #000'
         }}>
             {
                 active === 'profile' ? <Profile width={width} />

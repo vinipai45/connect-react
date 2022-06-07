@@ -2,9 +2,9 @@
 
 ._sidenav_active_item {
 
-    color: $secondary;
+    // color: $secondary;
     transition: color 100ms ease-out;
-    background-color: $lightGrey;
+    background-color: $primary_fade;
 
     h2 {
         font-weight: bold !important;
@@ -22,8 +22,8 @@
     &:hover {
         // background-color: #e8f5fe;
         // color: #50b7f5;
-        background-color: $lightGrey;
-        color: $secondary;
+        background-color: $primary_fade;
+        // color: $secondary;
         transition: color 100ms ease-out;
 
         h2 {
