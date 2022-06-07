@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react'
 import BottomNav from '../../components/BottomNav/BottomNav';
 import { Sidenav, SidenavMini } from '../../components/Sidenav/Sidenav'
 import { Outlet } from 'react-router-dom';
-import View from '../View/View';
 
 import { tabBreakpoint, mobileBreakpoint } from '../../utils/constants';
 // import { useNavigate } from 'react-router-dom'
 
-import './Main.scss'
+import './Layout.scss'
 import colors from '../../utils/_colors.scss';
 
-const Main = ({ route }) => {
+const Layout = ({ route }) => {
     // let navigate = useNavigate()
 
     const [active, setActive] = useState('home')
@@ -64,4 +63,4 @@ const Main = ({ route }) => {
     )
 }
 
-export default Main
+export default Layout

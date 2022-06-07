@@ -3,14 +3,13 @@ import { BrowserRouter, Routes, Route, } from 'react-router-dom';
 
 import PrivateRoute from './utils/helper-functions/PrivateRoute'
 import NotFound from './components/NotFound/NotFound';
-import Main from './screens/Main/Main'
+import Layout from './screens/Layout/Layout'
 import Login from './screens/Login/Login'
 import Logout from './screens/Logout/Logout'
 import Signup from './screens/Signup/Signup'
 import Test from './screens/Test/Test';
 import Profile from './screens/Profile/Profile';
 import Home from './screens/Home/Home';
-import View from './screens/View/View';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -23,7 +22,7 @@ function App() {
 
           <Route path='/' element={
             <PrivateRoute>
-              <Main />
+              <Layout />
             </PrivateRoute>
           } >
             <Route path="/profile" element={<Profile />} />
