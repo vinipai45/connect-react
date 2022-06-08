@@ -45,20 +45,20 @@ const Layout = ({ route }) => {
                 </div>
                 <div style={{
                     height: '100%',
-                    width: width < tabBreakpoint ? '100%' : '60%',
+                    width: '100%',
                     // border: '1px solid #000'
                 }}>
-                    <Outlet />
-
+                    <Outlet context={{ width }} />
+                    {
+                        width < mobileBreakpoint ?
+                            <BottomNav active={active} setActive={setActive} /> : <></>
+                    }
                 </div>
 
 
 
             </div>
-            {
-                width < mobileBreakpoint ?
-                    <BottomNav active={active} setActive={setActive} /> : <></>
-            }
+
         </>
     )
 }

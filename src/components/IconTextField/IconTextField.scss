@@ -2,11 +2,8 @@
 
 ._icon_text_field {
 
-
-
     label {
         color: $dark;
-        font-family: 'Work Sans';
         font-weight: 'bold';
     }
 
@@ -17,11 +14,6 @@
     .MuiInput-underline:after {
         border-bottom-color: $textGrey;
     }
-
-    .MuiInput-input {
-        font-family: 'Work Sans';
-    }
-
 
     MuiOutlinedInput-root {
         Mui-focused fieldset {

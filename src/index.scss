@@ -1,5 +1,6 @@
 html {
   height: 100%;
+  overflow-y: overlay;
 }
 
 body {
@@ -8,6 +9,7 @@ body {
 
   #root {
     height: 100%;
+
   }
 
   // background-color: #efefef;
@@ -32,6 +34,24 @@ body {
     padding: 0;
   }
 
+  ::-webkit-scrollbar {
+    width: 0.5em;
+    height: 0.2em;
+    position: absolute;
+    right: 0;
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #8A94A6;
+    border-radius: 20px;
+  }
+
+  ::-webkit-scrollbar :hover {
+    overflow: auto;
+    cursor: pointer;
+    padding-right: 1px;
+  }
 
 
 

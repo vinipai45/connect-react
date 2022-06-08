@@ -6,7 +6,6 @@ const IconButton = ({ textColor, type, fontSize, textCapital, backgroundColor, h
 
     const ColorButton = styled(Button)(({ theme }) => ({
         fontSize: fontSize,
-        fontFamily: 'Work Sans',
         fontWeight: 'bolder',
         color: textColor,
         backgroundColor: backgroundColor,

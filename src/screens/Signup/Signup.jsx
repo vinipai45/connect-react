@@ -75,6 +75,7 @@ const Signup = () => {
     const handleSubmit = async (event) => {
         setIsLoading(true)
         event.preventDefault()
+
         try {
 
             let errors = await validateSignupInputs(inputs)
@@ -111,7 +112,7 @@ const Signup = () => {
         <Box style={{ width: '100%', height: '100%', display: 'flex' }} className="_signup_main_container">
 
             <Box className="_signup_form_container">
-                <div className='_form_container'>
+                <form className='_form_container' onSubmit={handleSubmit} >
                     <h4>Get started with Connect.</h4>
                     <p style={{ color: `${colors.textGrey}` }}>
                         Already have an account ?
@@ -243,19 +244,6 @@ const Signup = () => {
                     </Box>
                     {inputErrors.gender ? <span style={{ color: 'red', fontSize: '12px', marginLeft: '10px', }} >{inputErrors.gender}</span> : <></>}
 
-
-
-
-                    <Typography
-                        sx={{
-                            mt: 3,
-                            float: 'right',
-                            color: `${colors.secondaryColor}`,
-                            fontWeight: 'bold',
-                            cursor: 'pointer',
-                        }}>
-                        forgot password ?
-                    </Typography>
                     {
                         isLoading ?
                             <Box
@@ -277,11 +265,10 @@ const Signup = () => {
                                 hoverBackgroundColor={colors.secondaryColor}
                                 title="Signup"
                                 variant="contained"
-                                onClick={handleSubmit}
                             />
                     }
 
-                </div>
+                </form>
 
                 <Footer />
 

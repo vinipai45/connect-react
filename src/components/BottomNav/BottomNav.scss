@@ -2,10 +2,12 @@
 
 ._bottom_nav {
     padding: 10px 10px;
+    // height: 50px;
     box-shadow: 0 -5px 10px $lightGrey;
     justify-content: space-between;
     display: flex;
-    position: absolute;
+    position: fixed;
+    background: $white;
     width: 100vw;
     bottom: 0;
 

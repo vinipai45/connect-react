@@ -1,11 +1,12 @@
 import React from 'react'
+import { Typography } from '@mui/material'
 
 const Home = () => {
     return (
         <div style={{
             height: '80%'
         }}>
-            <p>Home</p>
+            <Typography>Home</Typography>
         </div>
     )
 }
