@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 
+import TopBar from '../../components/TopBar/TopBar'
+
 const Notifications = () => {
 
     let { setActive } = useOutletContext()
@@ -12,7 +14,10 @@ const Notifications = () => {
 
 
     return (
-        <div>Notifications</div>
+        <>
+            <TopBar title="Notifications" />
+
+        </>
     )
 }
 

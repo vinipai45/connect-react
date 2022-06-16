@@ -10,7 +10,16 @@ import { CssBaseline, createTheme, ThemeProvider } from '@mui/material';
 const theme = createTheme({
   spacing: 10,
   palette: {
-    mode: "light"
+    mode: "light",
+    primary: {
+      main: '#4ECDC4'
+    },
+    secondary: {
+      main: '#FC5C65'
+    },
+    dark: {
+      main: '#252837'
+    }
   },
   typography: {
     fontFamily: "Work Sans",
