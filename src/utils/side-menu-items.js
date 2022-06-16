@@ -6,6 +6,7 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import SearchIcon from '@mui/icons-material/Search';
 import { IconButton } from '@mui/material';
 
 import '../components/SidenavLink/SidenavLink.scss'
@@ -17,9 +18,9 @@ const sideMenuItems = [
         icon: <HomeIcon className="_sidenav_icon" />
     },
     {
-        label: "Explore",
-        key: "explore",
-        icon: <TagIcon className="_sidenav_icon" />
+        label: "Search",
+        key: "search",
+        icon: <SearchIcon className="_sidenav_icon" />
     },
     {
         label: "Notifications",
@@ -62,10 +63,10 @@ const bottomNavItems = [
         </IconButton>
     },
     {
-        label: "Explore",
-        key: "explore",
+        label: "Search",
+        key: "search",
         icon: <IconButton size="large">
-            <TagIcon className="_bottom_nav_icon" />
+            <SearchIcon className="_bottom_nav_icon" />
         </IconButton>
     },
     // {

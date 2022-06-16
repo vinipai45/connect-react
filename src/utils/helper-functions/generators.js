@@ -1,5 +1,5 @@
 const generateUsername = (string) => {
-    let username = string.split(" ").join("").toLowerCase().concat('#' + Math.floor(1000 + Math.random() * 9000))
+    let username = string.split(" ").join("").toLowerCase().concat(Math.floor(1000 + Math.random() * 9000))
     return username
 }
 

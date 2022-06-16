@@ -48,7 +48,7 @@ const Layout = ({ route }) => {
                     width: '100%',
                     // border: '1px solid #000'
                 }}>
-                    <Outlet context={{ width }} />
+                    <Outlet context={{ width, setActive }} />
                     {
                         width < mobileBreakpoint ?
                             <BottomNav active={active} setActive={setActive} /> : <></>

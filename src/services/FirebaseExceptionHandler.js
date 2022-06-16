@@ -8,6 +8,8 @@ const firebaseExceptionHandler = (code) => {
             return "user already exists !"
         case "auth/invalid-email":
             return "invalid email"
+        case "auth/network-request-failed":
+            return "please check your internet connection"
         default:
             return code
     }

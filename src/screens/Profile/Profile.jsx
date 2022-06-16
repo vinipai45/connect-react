@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom';
 import { Box, Button, Typography } from '@mui/material';
+
+import TopBar from '../../components/TopBar/TopBar';
 
 import './Profile.scss'
 import colors from '../../utils/_colors.scss';
@@ -9,7 +11,11 @@ import { maleAvatars } from '../../utils/helper-functions/avatars';
 import { tabBreakpoint } from '../../utils/constants'
 
 const Profile = () => {
-  const { width } = useOutletContext();
+  const { width, setActive } = useOutletContext();
+
+  useEffect(() => {
+    setActive('profile')
+  }, [])
 
   return (
     <div className='_profile_container'
@@ -17,6 +23,7 @@ const Profile = () => {
         paddingRight: width < 1200 ? 0 : '20%',
       }}
     >
+      <TopBar title="Shambu Doe" />
       <Box sx={{
         width: '100%',
         height: '25%',

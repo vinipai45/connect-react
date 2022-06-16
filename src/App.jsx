@@ -10,6 +10,8 @@ import Signup from './screens/Signup/Signup'
 import Test from './screens/Test/Test';
 import Profile from './screens/Profile/Profile';
 import Home from './screens/Home/Home';
+import Search from './screens/Search/Search';
+import Notifications from './screens/Notifications/Notifications';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -27,6 +29,8 @@ function App() {
           } >
             <Route path="/profile" element={<Profile />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/notifications" element={<Notifications />} />
 
           </Route>
 
