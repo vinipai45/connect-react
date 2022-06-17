@@ -1,15 +1,19 @@
-import { Box } from '@mui/system'
 import React, { useEffect, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
+
+import { Box, Pagination, Stack } from '@mui/material'
+
 
 import SearchBar from '../../components/SearchBar/SearchBar'
 import SearchItem from '../../components/SearchItem/SearchItem'
 import TopBar from '../../components/TopBar/TopBar'
 import images from '../../utils/helper-functions/images'
 
+import './Search.scss'
+
 const Search = () => {
 
-    const [results, setResults] = useState([1])
+    const [results, setResults] = useState([1, 2, 3, 1, 2, 3, 1, 2, 3,])
 
     let { width, setActive } = useOutletContext()
 
@@ -31,19 +35,25 @@ const Search = () => {
             </Box>
             {
                 results?.length >= 1 ?
-                    <>
-                        <SearchItem />
-                        <hr />
-                        <SearchItem />
-                        <hr />
-                        <SearchItem />
-                        <hr />
-                    </> :
+                    <Box style={{ margin: '20px' }} >
+                        {
+                            results?.map((item, index) => (
+                                <>
+                                    <SearchItem />
+                                    {index == results.length - 1 ? <></> : <hr />}
+                                </>
+                            ))
+                        }
+
+                    </Box> :
                     <Box style={{ margin: '20px' }}>
                         <img style={{ overflow: 'hidden', width: '100%' }} src={images.search_isometric} alt="no result svg" />
                     </Box>
             }
 
+            {/* <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+                <Pagination count={10} color="primary" />
+            </Box> */}
         </div>
     )
 }

@@ -8,6 +8,7 @@ import { tabBreakpoint, mobileBreakpoint } from '../../utils/constants';
 
 import './Layout.scss'
 import colors from '../../utils/_colors.scss';
+import TopBar from '../../components/TopBar/TopBar';
 
 const Layout = ({ route }) => {
     // let navigate = useNavigate()
@@ -43,6 +44,7 @@ const Layout = ({ route }) => {
 
                     }
                 </div>
+
                 <div style={{
                     height: '100%',
                     width: '100%',
