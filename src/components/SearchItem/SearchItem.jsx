@@ -3,7 +3,7 @@ import colors from '../../utils/_colors.scss';
 import { maleAvatars } from '../../utils/helper-functions/avatars'
 import { Box, Typography } from '@mui/material';
 
-const SearchItem = () => {
+const SearchItem = ({ item }) => {
     return (
         <Box sx={{ display: 'flex' }}>
             <img src={maleAvatars[0]} alt=""
@@ -29,7 +29,7 @@ const SearchItem = () => {
                         cursor: 'pointer',
                         textDecoration: 'underline'
                     },
-                }}>Shambu Doe</Typography>
+                }}>Shambu Doe {item}</Typography>
                 <Typography sx={{
                     fontSize: '12px'
                 }}>shambu_doe</Typography>

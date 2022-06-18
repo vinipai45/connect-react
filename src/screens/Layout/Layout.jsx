@@ -15,9 +15,13 @@ const Layout = ({ route }) => {
 
     const [active, setActive] = useState('home')
     const [width, setWidth] = React.useState(window.innerWidth);
+    const [height, setHeight] = React.useState(window.innerHeight);
 
     useEffect(() => {
-        const handleWindowResize = () => setWidth(window.innerWidth)
+        const handleWindowResize = () => {
+            setHeight(window.innerHeight)
+            setWidth(window.innerWidth)
+        }
         window.addEventListener("resize", handleWindowResize);
 
         return () => window.removeEventListener("resize", handleWindowResize);
@@ -50,7 +54,7 @@ const Layout = ({ route }) => {
                     width: '100%',
                     // border: '1px solid #000'
                 }}>
-                    <Outlet context={{ width, setActive }} />
+                    <Outlet context={{ width, height, setActive }} />
                     {
                         width < mobileBreakpoint ?
                             <BottomNav active={active} setActive={setActive} /> : <></>
