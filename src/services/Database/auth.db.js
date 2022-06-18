@@ -3,22 +3,19 @@ import { USERS } from '../Database/collections'
 
 class AuthDB {
 
-    async saveUserToDB(docId, data) {
-        return new Promise(async (resolve, reject) => {
-            firebase
-                .firestore()
-                .collection(USERS)
-                .doc(docId)
-                .set(data)
-                .then(() => {
-
-                    return resolve(true)
-                })
-                .catch(err => {
-                    return reject(err)
-                })
-
-        })
+    saveUserToDB(docId, data) {
+        firebase
+            .firestore()
+            .collection(USERS)
+            .doc(docId)
+            .set(data)
+            .then(() => {
+                return true
+            })
+            .catch(err => {
+                console.log(' AuthDB -> saveUserToDB', err)
+                return err
+            })
 
     }
 
