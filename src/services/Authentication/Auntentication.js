@@ -35,7 +35,7 @@ class Authentication {
 
                 let uid = googleLoggedInUser.user.multiFactor.user.uid
 
-                let namesearch = getNameSearchArray(user.displayName)
+                let namesearch = getNameSearchArray(user.displayName.trim())
 
                 let data = {
                     bio: "",
@@ -109,7 +109,7 @@ class Authentication {
                     user = user.user.multiFactor.user
                 }
 
-                let namesearch = getNameSearchArray(inputs.name)
+                let namesearch = getNameSearchArray(inputs.name.trim())
 
                 let data = {
                     bio: "",
