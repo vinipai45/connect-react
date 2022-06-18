@@ -10,7 +10,7 @@ import './Layout.scss'
 import colors from '../../utils/_colors.scss';
 import TopBar from '../../components/TopBar/TopBar';
 
-const Layout = ({ route }) => {
+const Layout = () => {
     // let navigate = useNavigate()
 
     const [active, setActive] = useState('home')

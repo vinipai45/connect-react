@@ -1,20 +1,40 @@
-import React, { useEffect } from 'react'
-import { useOutletContext } from 'react-router-dom';
-import { Box, Button, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { Box, Button, Typography, Modal } from '@mui/material';
 
 import TopBar from '../../components/TopBar/TopBar';
 
 import './Profile.scss'
 import colors from '../../utils/_colors.scss';
 
-import { maleAvatars } from '../../utils/helper-functions/avatars';
-import { tabBreakpoint } from '../../utils/constants'
+import UserDB from '../../services/UserDB/UserDB';
+import { auth_user, tabBreakpoint } from '../../utils/constants'
 
 const Profile = () => {
   const { width, setActive } = useOutletContext();
+  const { uid } = JSON.parse(localStorage.getItem(auth_user))
+
+  let navigate = useNavigate()
+  const userDB = new UserDB();
+
+  const [user, setUser] = useState()
+  const [openModal, setOpenModal] = useState(false)
 
   useEffect(() => {
     setActive('profile')
+  }, [])
+
+  useEffect(() => {
+    async function getUserDetail() {
+      let user = await userDB.getById(uid)
+      if (user) {
+        setUser(user)
+      } else {
+        navigate('/logout')
+      }
+    }
+    getUserDetail()
+
   }, [])
 
   return (
@@ -23,7 +43,7 @@ const Profile = () => {
         paddingRight: width < 1200 ? 0 : '20%',
       }}
     >
-      <TopBar title="Shambu Doe" />
+      <TopBar title={user?.name} />
       <Box sx={{
         width: '100%',
         height: '25%',
@@ -32,7 +52,7 @@ const Profile = () => {
 
       <Box sx={{ display: 'flex' }} >
 
-        <img src={maleAvatars[0]} alt=""
+        <img src={user?.avatar} alt=""
           style={{
             border: `1px solid ${colors.white}`,
             background: `${colors.white}`,
@@ -69,15 +89,15 @@ const Profile = () => {
         <Typography sx={{
           fontWeight: 600,
           fontSize: '19px',
-
+          textTransform: 'capitalize'
         }} >
-          Shambu Doe
+          {user?.name}
         </Typography>
 
         <Typography sx={{
           fontSize: '14px',
         }} >
-          @shambu_doe
+          {user?.username}
         </Typography>
 
         <Typography sx={{

@@ -31,7 +31,7 @@ const Search = () => {
 
     useEffect(() => {
         async function getSearchUsers() {
-            let userResults = await userDB.searchUsers(searchText)
+            let userResults = await userDB.search(searchText)
             setResults(userResults)
         }
         getSearchUsers()

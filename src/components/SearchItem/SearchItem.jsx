@@ -11,7 +11,8 @@ const SearchItem = ({ item }) => {
                     background: `${colors.white}`,
                     borderRadius: '50%',
                     width: '50px',
-                    height: '50px'
+                    height: '50px',
+                    objectFit: 'cover',
                 }}
             />
             <Box sx={{
@@ -24,13 +25,14 @@ const SearchItem = ({ item }) => {
                 <Typography sx={{
                     fontWeight: 600,
                     fontSize: '15px',
+                    textTransform: 'capitalize',
                     "&:hover": {
                         cursor: 'pointer',
                         textDecoration: 'underline'
                     },
                 }}>{item?.name}</Typography>
                 <Typography sx={{
-                    fontSize: '12px'
+                    fontSize: '12px',
                 }}>{item?.username}</Typography>
             </Box>
         </Box>

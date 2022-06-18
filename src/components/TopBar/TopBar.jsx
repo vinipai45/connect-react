@@ -23,7 +23,8 @@ const TopBar = ({ title }) => {
                 <Typography sx={{
                     marginLeft: '5px',
                     fontWeight: 700,
-                    fontSize: '18px'
+                    fontSize: '18px',
+                    textTransform: 'capitalize'
                 }} >{title}</Typography>
             </Box>
         </>
