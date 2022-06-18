@@ -35,7 +35,7 @@ const CssTextField = styled(TextField)({
     // }
 });
 
-const SearchBar = ({ style }) => {
+const SearchBar = ({ style, onChange }) => {
     return (
         <>
             <div className="_searchbar">
@@ -53,6 +53,7 @@ const SearchBar = ({ style }) => {
                             </InputAdornment>
                         ),
                     }}
+                    onChange={onChange}
                 />
             </div>
         </>

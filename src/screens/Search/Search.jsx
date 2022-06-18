@@ -11,30 +11,44 @@ import images from '../../utils/helper-functions/images'
 
 import './Search.scss'
 
+import UserDB from '../../services/UserDB/UserDB';
+
 const Search = () => {
 
-    const [results, setResults] = useState([1, 2, 3, 1, 2, 3,])
+    const [searchText, setSearchText] = useState("")
+    const [results, setResults] = useState([])
 
+    let userDB = new UserDB()
     let { width, height, setActive } = useOutletContext()
-
-    const scrollHeight = height - 40
 
     useEffect(() => {
         setActive('search')
-    }, [])
+    }, [setActive])
+
+    const handleSearchTextChange = (e) => {
+        setSearchText(e.target.value)
+    }
+
+    useEffect(() => {
+        async function getSearchUsers() {
+            let userResults = await userDB.searchUsers(searchText)
+            setResults(userResults)
+        }
+        getSearchUsers()
+    }, [searchText])
 
     const fetchMoreData = () => {
-        if (results.length >= 100) {
-            this.setState({ hasMore: false });
-            return;
-        }
-        // a fake async api call like which sends
-        // 20 more records in .5 secs
-        setTimeout(() => {
-            setResults(
-                results.concat(Array.from({ length: 10 }))
-            );
-        }, 500);
+        // if (results.length >= 100) {
+        //     this.setState({ hasMore: false });
+        //     return;
+        // }
+        // // a fake async api call like which sends
+        // // 20 more records in .5 secs
+        // setTimeout(() => {
+        //     setResults(
+        //         results.concat(Array.from({ length: 10 }))
+        //     );
+        // }, 500);
     };
 
 
@@ -53,18 +67,20 @@ const Search = () => {
             >
                 <TopBar title="Search" />
                 <Box style={{ margin: '20px' }}>
-                    <SearchBar style={{ width: '100%' }} />
-
+                    <SearchBar
+                        style={{ width: '100%' }}
+                        onChange={handleSearchTextChange}
+                    />
                 </Box>
                 {
                     results?.length >= 1 ?
                         <Box style={{ margin: '20px' }} >
 
                             {results.map((item, index) => (
-                                <>
-                                    <SearchItem item={index} />
-                                    {index == results.length - 1 ? <></> : <hr />}
-                                </>
+                                <div key={item?.username}>
+                                    <SearchItem item={item} />
+                                    {index === results?.length - 1 ? <></> : <hr />}
+                                </div>
                             ))}
                         </Box>
 

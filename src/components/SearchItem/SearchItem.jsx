@@ -1,12 +1,11 @@
 import React from 'react'
 import colors from '../../utils/_colors.scss';
-import { maleAvatars } from '../../utils/helper-functions/avatars'
 import { Box, Typography } from '@mui/material';
 
 const SearchItem = ({ item }) => {
     return (
         <Box sx={{ display: 'flex' }}>
-            <img src={maleAvatars[0]} alt=""
+            <img src={item?.avatar} alt=""
                 style={{
                     border: `1px solid ${colors.white}`,
                     background: `${colors.white}`,
@@ -29,10 +28,10 @@ const SearchItem = ({ item }) => {
                         cursor: 'pointer',
                         textDecoration: 'underline'
                     },
-                }}>Shambu Doe {item}</Typography>
+                }}>{item?.name}</Typography>
                 <Typography sx={{
                     fontSize: '12px'
-                }}>shambu_doe</Typography>
+                }}>{item?.username}</Typography>
             </Box>
         </Box>
     )
