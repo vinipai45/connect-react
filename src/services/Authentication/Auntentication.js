@@ -1,7 +1,7 @@
 import { firebase } from "../../services/firebase"
 import AuthDB from "../Database/auth.db";
 import { auth_token, auth_user } from "../../utils/constants";
-import { generateUsername } from "../../utils/helper-functions/generators";
+import { generateUsername, getNameSearchArray } from "../../utils/helper-functions/generators";
 
 
 class Authentication {
@@ -35,20 +35,20 @@ class Authentication {
 
                 let uid = googleLoggedInUser.user.multiFactor.user.uid
 
+                let namesearch = getNameSearchArray(user.displayName)
+
                 let data = {
                     bio: "",
                     avatar: user.photoURL,
                     email: user.email,
-                    name: user.displayName,
-                    username: generateUsername(user.displayName),
-                    followers: 0,
-                    following: 0,
+                    name: user.displayName.toString().toLowerCase().trim(),
+                    username: generateUsername(user.displayName).trim(),
+                    namesearch,
                     role: "user",
                     gender: ""
                 }
 
                 if (isNewUser) {
-                    console.log("entered")
                     await this.authDB.saveUserToDB(uid, data)
 
                 }
@@ -83,8 +83,6 @@ class Authentication {
                     return reject(false)
                 }
 
-                console.log(user, "user")
-
                 user = user.user.multiFactor.user
 
                 return resolve(user)
@@ -111,14 +109,15 @@ class Authentication {
                     user = user.user.multiFactor.user
                 }
 
+                let namesearch = getNameSearchArray(inputs.name)
+
                 let data = {
                     bio: "",
                     avatar: inputs.avatar,
-                    email: inputs.email,
-                    name: inputs.name,
-                    username: inputs.username,
-                    followers: 0,
-                    following: 0,
+                    email: inputs.email.trim(),
+                    name: inputs.name.toLowerCase().trim(),
+                    username: inputs.username.trim(),
+                    namesearch,
                     role: "user",
                     gender: inputs.gender
                 }
