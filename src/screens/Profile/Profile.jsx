@@ -120,7 +120,8 @@ const Profile = () => {
             marginTop: '-70px',
             marginLeft: '20px',
             width: '130px',
-            height: '130px'
+            height: '130px',
+            objectFit: 'cover',
           }}
         />
 
@@ -228,7 +229,7 @@ const Profile = () => {
               }
             />
 
-            <EditProfile screenWidth={width} data={user} errors={errors} updateInputs={updateInputs} setUpdateInputs={setUpdateInputs} />
+            <EditProfile screenWidth={width} user={{ ...user, uid }} errors={errors} updateInputs={updateInputs} setUpdateInputs={setUpdateInputs} />
           </AppModal> : <></>
       }
 

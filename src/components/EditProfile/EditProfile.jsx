@@ -1,13 +1,20 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux';
+
 import { Box, TextField, IconButton, Tooltip } from '@mui/material'
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 import colors from '../../utils/_colors.scss';
 import FileUploader from '../FileUploader/FileUploader';
 
+import { firebase } from '../../services/firebase'
 
-const EditProfile = ({ style, errors, screenWidth, updateInputs, setUpdateInputs }) => {
 
+const EditProfile = ({ user, style, errors, screenWidth, updateInputs, setUpdateInputs }) => {
+
+
+    const storage = firebase.storage()
+    let Toast = useSelector((s) => s.toast);
 
     const handleChange = (e) => {
         setUpdateInputs({
@@ -18,7 +25,25 @@ const EditProfile = ({ style, errors, screenWidth, updateInputs, setUpdateInputs
 
     const handleFileChange = (e) => {
         const fileUploaded = e.target.files[0];
-        console.log(fileUploaded, "fileUploaded")
+
+        storage.ref(`/avatar/${user.uid}`).put(fileUploaded)
+            .on(
+                "state_changed",
+                Toast.fire({
+                    icon: 'success',
+                    title: `upload successful`
+                }),
+                alert,
+                storage.ref(`avatar`).child(`${user.uid}`).getDownloadURL().then(
+                    (url) => {
+                        setUpdateInputs({
+                            ...updateInputs,
+                            avatar: url
+                        });
+                    })
+            );
+
+
     }
 
 
