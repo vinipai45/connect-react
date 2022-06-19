@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux';
 
-import { Box, TextField, IconButton, Tooltip } from '@mui/material'
+import { Box, TextField, Tooltip } from '@mui/material'
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 import colors from '../../utils/_colors.scss';
