@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { Box, Button, IconButton, Typography, Tooltip } from '@mui/material';
+import { useSelector } from 'react-redux';
 
+import { Box, Button, IconButton, Typography, Tooltip } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -14,16 +15,26 @@ import colors from '../../utils/_colors.scss';
 
 import UserDB from '../../services/UserDB/UserDB';
 import { auth_user, tabBreakpoint } from '../../utils/constants'
+import { validateUpdateProfileInputs } from '../../validations/updateprofile.validations';
+import { firebaseExceptionHandler } from '../../services/FirebaseExceptionHandler';
 
 const Profile = () => {
   const { width, setActive } = useOutletContext();
   const { uid } = JSON.parse(localStorage.getItem(auth_user))
 
   let navigate = useNavigate()
-  const userDB = new UserDB();
+  let Toast = useSelector((s) => s.toast);
 
+  const userDB = new UserDB();
+  const initial = {
+    avatar: '',
+    name: '',
+    bio: '',
+    username: ''
+  }
   const [user, setUser] = useState()
   const [updateInputs, setUpdateInputs] = useState()
+  const [errors, setErrors] = useState(initial)
   const [openModal, setOpenModal] = useState(false)
 
   useEffect(() => {
@@ -43,14 +54,49 @@ const Profile = () => {
 
   }, [])
 
-  useEffect(() => {
-    setUpdateInputs({
-      avatar: user?.avatar,
-      name: user?.name,
-      username: user?.username,
-      bio: user?.bio
-    })
-  }, [user])
+  const handleUpdate = async () => {
+    try {
+      if ((
+        user.name === updateInputs.name &&
+        user.avatar === updateInputs.avatar &&
+        user.username === updateInputs.username &&
+        user.bio === updateInputs.bio)
+      ) {
+        setOpenModal(false)
+        Toast.fire({
+          icon: 'success',
+          title: `already up-to-date`
+        })
+      } else {
+
+        let err = validateUpdateProfileInputs(updateInputs)
+        console.log(err, "err")
+        if (!err.isValid) {
+          setErrors(err.error)
+          return
+        }
+        let updatedUser = await userDB.update(uid, updateInputs)
+        setUser(updatedUser)
+        setOpenModal(false)
+        Toast.fire({
+          icon: 'success',
+          title: `update successful!`
+        })
+
+      }
+    } catch (error) {
+      console.log('Profile.jsx -> handleUpdate', error)
+      let errorMessage = firebaseExceptionHandler(error.code)
+      Toast.fire({
+        icon: 'error',
+        title: `${errorMessage}`
+      })
+    }
+
+
+  }
+
+
 
   return (
     <div className='_profile_container'
@@ -94,7 +140,16 @@ const Profile = () => {
               borderColor: `${colors.dark}`,
             },
           }}
-          onClick={() => setOpenModal(true)}
+          onClick={() => {
+            setUpdateInputs({
+              avatar: user?.avatar,
+              name: user?.name,
+              username: user?.username,
+              bio: user?.bio
+            })
+            setErrors(initial)
+            setOpenModal(true)
+          }}
 
           variant="outlined">
           Edit Profile
@@ -157,20 +212,24 @@ const Profile = () => {
               title="Edit Profile"
               onBackClick={() => setOpenModal(false)}
               startIcon={
-                <IconButton size='large' onClick={() => setOpenModal(false)} >
+                <IconButton size='large' onClick={() => { setOpenModal(false) }} >
                   <CloseIcon fontSize="inherit" />
                 </IconButton>
               }
               endIcon={
                 <Tooltip title="Save">
-                  <IconButton size='large' sx={{ color: '#388e3c' }}>
+                  <IconButton
+                    size='large'
+                    sx={{ color: '#388e3c' }}
+                    onClick={handleUpdate}
+                  >
                     <CheckCircleIcon fontSize="inherit" />
                   </IconButton>
                 </Tooltip>
               }
             />
 
-            <EditProfile screenWidth={width} data={user} updateInputs={updateInputs} setUpdateInputs={setUpdateInputs} />
+            <EditProfile screenWidth={width} data={user} errors={errors} updateInputs={updateInputs} setUpdateInputs={setUpdateInputs} />
           </AppModal> : <></>
       }
 

@@ -5,11 +5,14 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import colors from '../../utils/_colors.scss';
 
 
-const EditProfile = ({ data, style, screenWidth, updateInputs, setUpdateInputs }) => {
+const EditProfile = ({ style, errors, screenWidth, updateInputs, setUpdateInputs }) => {
 
 
     const handleChange = (e) => {
-
+        setUpdateInputs({
+            ...updateInputs,
+            [e.target.name]: e.target.value
+        })
     }
 
 
@@ -66,26 +69,36 @@ const EditProfile = ({ data, style, screenWidth, updateInputs, setUpdateInputs }
                 <TextField
                     autoComplete='off'
                     label="name"
+                    name="name"
                     variant="outlined"
                     sx={{ width: '100%', mt: 2 }}
                     value={updateInputs?.name}
+                    error={errors?.name}
+                    helperText={errors?.name}
+                    onChange={handleChange}
                     inputProps={{ maxLength: 32 }}
                 />
                 <TextField
                     autoComplete='off'
                     label="username"
+                    name="username"
+                    error={errors?.username}
+                    helperText={errors?.username}
                     variant="outlined"
                     value={updateInputs?.username}
+                    onChange={handleChange}
                     sx={{ width: '100%', mt: 2 }}
                     inputProps={{ maxLength: 32 }}
                 />
                 <TextField
                     autoComplete='off'
                     label="bio"
+                    name="bio"
                     multiline
                     rows={4}
                     variant="outlined"
                     value={updateInputs?.bio}
+                    onChange={handleChange}
                     sx={{ width: '100%', mt: 2 }}
                     inputProps={{ maxLength: 100 }}
                 />
