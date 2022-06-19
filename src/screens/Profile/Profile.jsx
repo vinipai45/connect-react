@@ -70,7 +70,6 @@ const Profile = () => {
       } else {
 
         let err = validateUpdateProfileInputs(updateInputs)
-        console.log(err, "err")
         if (!err.isValid) {
           setErrors(err.error)
           return

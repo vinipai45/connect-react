@@ -3,6 +3,7 @@ import { Box, TextField, IconButton, Tooltip } from '@mui/material'
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 import colors from '../../utils/_colors.scss';
+import FileUploader from '../FileUploader/FileUploader';
 
 
 const EditProfile = ({ style, errors, screenWidth, updateInputs, setUpdateInputs }) => {
@@ -13,6 +14,11 @@ const EditProfile = ({ style, errors, screenWidth, updateInputs, setUpdateInputs
             ...updateInputs,
             [e.target.name]: e.target.value
         })
+    }
+
+    const handleFileChange = (e) => {
+        const fileUploaded = e.target.files[0];
+        console.log(fileUploaded, "fileUploaded")
     }
 
 
@@ -56,9 +62,10 @@ const EditProfile = ({ style, errors, screenWidth, updateInputs, setUpdateInputs
                     }}
                 >
                     <Tooltip title="Add Photo">
-                        <IconButton size='large' sx={{ color: '#fff', background: 'transparent' }}>
-                            <CameraAltIcon fontSize="inherit" />
-                        </IconButton>
+                        <FileUploader
+                            icon={<CameraAltIcon fontSize="inherit" />}
+                            handleFileChange={handleFileChange}
+                        />
                     </Tooltip>
                 </Box>
 
