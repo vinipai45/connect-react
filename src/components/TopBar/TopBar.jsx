@@ -7,25 +7,34 @@ import colors from '../../utils/_colors.scss';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, IconButton, Typography } from '@mui/material';
 
-const TopBar = ({ title }) => {
+const TopBar = ({ title, style, onBackClick, startIcon, endIcon }) => {
 
     const navigate = useNavigate()
 
     return (
         <>
-            <Box className="_topbar">
-                <IconButton
-                    sx={{ color: `${colors.dark}` }}
-                    onClick={() => navigate('/home')}
-                >
-                    <ArrowBackIcon />
-                </IconButton>
+            <Box className="_topbar" style={style}>
+                {
+                    startIcon ? startIcon :
+                        <IconButton
+                            sx={{ color: `${colors.dark}` }}
+                            onClick={onBackClick ? onBackClick : () => navigate('/home')}
+                        >
+                            <ArrowBackIcon />
+                        </IconButton>
+                }
                 <Typography sx={{
                     marginLeft: '5px',
                     fontWeight: 700,
                     fontSize: '18px',
                     textTransform: 'capitalize'
                 }} >{title}</Typography>
+                <Box sx={{ ml: 'auto' }}>
+                    {
+                        endIcon ? endIcon : <></>
+                    }
+                </Box>
+
             </Box>
         </>
     )

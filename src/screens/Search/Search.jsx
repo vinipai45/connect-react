@@ -76,12 +76,14 @@ const Search = () => {
                     results?.length >= 1 ?
                         <Box style={{ margin: '20px' }} >
 
-                            {results.map((item, index) => (
-                                <div key={item?.username}>
-                                    <SearchItem item={item} />
-                                    {index === results?.length - 1 ? <></> : <hr />}
-                                </div>
-                            ))}
+                            {
+                                results.map((item, index) => (
+                                    <div key={item?.username}>
+                                        <SearchItem item={item} />
+                                        {index === results?.length - 1 ? <></> : <hr />}
+                                    </div>
+                                ))
+                            }
                         </Box>
 
                         :

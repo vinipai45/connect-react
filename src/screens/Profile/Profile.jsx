@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { Box, Button, Typography, Modal } from '@mui/material';
+import { Box, Button, IconButton, Typography, Tooltip } from '@mui/material';
+
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close';
 
 import TopBar from '../../components/TopBar/TopBar';
+import AppModal from '../../components/AppModal/AppModal';
+import EditProfile from '../../components/EditProfile/EditProfile';
 
 import './Profile.scss'
 import colors from '../../utils/_colors.scss';
@@ -18,6 +23,7 @@ const Profile = () => {
   const userDB = new UserDB();
 
   const [user, setUser] = useState()
+  const [updateInputs, setUpdateInputs] = useState()
   const [openModal, setOpenModal] = useState(false)
 
   useEffect(() => {
@@ -36,6 +42,15 @@ const Profile = () => {
     getUserDetail()
 
   }, [])
+
+  useEffect(() => {
+    setUpdateInputs({
+      avatar: user?.avatar,
+      name: user?.name,
+      username: user?.username,
+      bio: user?.bio
+    })
+  }, [user])
 
   return (
     <div className='_profile_container'
@@ -79,6 +94,7 @@ const Profile = () => {
               borderColor: `${colors.dark}`,
             },
           }}
+          onClick={() => setOpenModal(true)}
 
           variant="outlined">
           Edit Profile
@@ -103,7 +119,7 @@ const Profile = () => {
         <Typography sx={{
           fontSize: '14px',
           margin: '20px auto'
-        }} >Lorem ipsum, dolor sit amet consectetur adipisicing elit</Typography>
+        }} >{user?.bio}</Typography>
 
         <Box sx={{ display: 'flex' }}>
 
@@ -130,6 +146,33 @@ const Profile = () => {
 
       </Box>
 
+      {
+        openModal ?
+          <AppModal
+            open={openModal}
+            screenWidth={width}
+            onClose={() => setOpenModal(false)}
+          >
+            <TopBar
+              title="Edit Profile"
+              onBackClick={() => setOpenModal(false)}
+              startIcon={
+                <IconButton size='large' onClick={() => setOpenModal(false)} >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              endIcon={
+                <Tooltip title="Save">
+                  <IconButton size='large' sx={{ color: '#388e3c' }}>
+                    <CheckCircleIcon fontSize="inherit" />
+                  </IconButton>
+                </Tooltip>
+              }
+            />
+
+            <EditProfile screenWidth={width} data={user} updateInputs={updateInputs} setUpdateInputs={setUpdateInputs} />
+          </AppModal> : <></>
+      }
 
     </div >
   )
