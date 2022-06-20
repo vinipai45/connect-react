@@ -1,6 +1,7 @@
 import React from 'react'
-import { TextField, styled, InputAdornment } from '@mui/material'
+import { TextField, styled, InputAdornment, IconButton } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
 
 const CssTextField = styled(TextField)({
     '& .MuiInputLabel-outlined': {
@@ -35,7 +36,7 @@ const CssTextField = styled(TextField)({
     // }
 });
 
-const SearchBar = ({ style, onChange }) => {
+const SearchBar = ({ style, searchText, setSearchText, onChange }) => {
     return (
         <>
             <div className="_searchbar">
@@ -43,13 +44,22 @@ const SearchBar = ({ style, onChange }) => {
                     autoComplete='off'
                     style={style}
                     variant='outlined'
+                    value={searchText}
                     label="Search People"
                     placeholder='type here'
                     InputProps={{
-                        type: "search",
                         endAdornment: (
                             <InputAdornment position="end">
-                                <SearchIcon color='dark' sx={{ m: 2 }} />
+                                {
+                                    searchText ?
+                                        <IconButton onClick={() => setSearchText('')}>
+                                            <CloseIcon fontSize="inherit" />
+                                        </IconButton>
+                                        :
+                                        <IconButton>
+                                            <SearchIcon color='dark' />
+                                        </IconButton>
+                                }
                             </InputAdornment>
                         ),
                     }}

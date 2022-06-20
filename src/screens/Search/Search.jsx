@@ -68,6 +68,8 @@ const Search = () => {
                 <TopBar title="Search" />
                 <Box style={{ margin: '20px' }}>
                     <SearchBar
+                        searchText={searchText}
+                        setSearchText={setSearchText}
                         style={{ width: '100%' }}
                         onChange={handleSearchTextChange}
                     />
