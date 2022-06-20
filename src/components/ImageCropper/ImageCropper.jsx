@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import { Box, Slider, Typography } from '@mui/material'
 import { withStyles } from '@mui/styles'
 import Cropper from 'react-easy-crop'
@@ -10,17 +10,18 @@ const dogImg =
     'https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000'
 
 
-const ImageCropper = ({ screenWidth, classes, image }) => {
-
-    const [crop, setCrop] = useState({ x: 0, y: 0 })
-    const [rotation, setRotation] = useState(0)
-    const [zoom, setZoom] = useState(1)
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
-    const [croppedImage, setCroppedImage] = useState(null)
-
-    const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-        setCroppedAreaPixels(croppedAreaPixels)
-    }, [])
+const ImageCropper = ({
+    screenWidth,
+    classes,
+    image,
+    crop,
+    setCrop,
+    zoom,
+    setZoom,
+    rotation,
+    setRotation,
+    onCropComplete,
+}) => {
 
     return (
         <Box sx={{ height: '100%' }}>
@@ -89,14 +90,6 @@ const ImageCropper = ({ screenWidth, classes, image }) => {
                         onChange={(e, rotation) => setRotation(rotation)}
                     />
                 </Box>
-                {/* <Button
-          onClick={showCroppedImage}
-          variant="contained"
-          color="primary"
-          classes={{ root: classes.cropButton }}
-        >
-          Show Result
-        </Button> */}
             </Box>
         </Box>
     )

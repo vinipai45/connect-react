@@ -4,11 +4,6 @@ export const styles = (theme) => ({
         width: '100%',
         background: '#333',
     },
-    cropButton: {
-        flexShrink: 0,
-        marginLeft: 16,
-    },
-
     sliderContainer: {
         display: 'flex',
         flex: '1',

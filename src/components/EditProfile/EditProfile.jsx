@@ -17,6 +17,7 @@ const EditProfile = ({
     errors,
     screenWidth,
     updateInputs,
+    croppedImage,
     setUpdateInputs,
     setBase64Image,
     setCropImageInProgress,
@@ -86,7 +87,7 @@ const EditProfile = ({
                 backgroundColor: `${colors.primaryColor}`,
             }} />
             <Box sx={{ position: 'relative' }}>
-                <img src={updateInputs?.avatar} alt=""
+                <img src={croppedImage ? croppedImage : updateInputs?.avatar} alt=""
                     style={{
                         border: `1px solid ${colors.white}`,
                         background: `${colors.white}`,

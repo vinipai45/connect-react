@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -11,10 +11,10 @@ import TopBar from '../../components/TopBar/TopBar';
 import AppModal from '../../components/AppModal/AppModal';
 import EditProfile from '../../components/EditProfile/EditProfile';
 import StyledImageCropper from '../../components/ImageCropper/ImageCropper';
+import getCroppedImg from '../../components/ImageCropper/cropImage'
 
 import './Profile.scss'
 import colors from '../../utils/_colors.scss';
-
 import UserDB from '../../services/UserDB/UserDB';
 import { auth_user, tabBreakpoint } from '../../utils/constants'
 import { validateUpdateProfileInputs } from '../../validations/updateprofile.validations';
@@ -40,6 +40,16 @@ const Profile = () => {
   const [updateInputs, setUpdateInputs] = useState()
   const [errors, setErrors] = useState(initial)
   const [openModal, setOpenModal] = useState(false)
+
+  const [crop, setCrop] = useState({ x: 0, y: 0 })
+  const [rotation, setRotation] = useState(0)
+  const [zoom, setZoom] = useState(1)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
+  const [croppedImage, setCroppedImage] = useState(null)
+
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels)
+  }, [])
 
   useEffect(() => {
     setActive('profile')
@@ -99,8 +109,36 @@ const Profile = () => {
 
   }
 
-  const handleSaveCroppedImage = () => {
+  const handleEditProfileClick = async () => {
+    setUpdateInputs({
+      avatar: user?.avatar,
+      name: user?.name,
+      username: user?.username,
+      bio: user?.bio
+    })
+    setErrors(initial)
+    setOpenModal(true)
+    setCrop({ x: 0, y: 0 })
+    setRotation(0)
+    setZoom(1)
+    setCroppedAreaPixels(null)
+    setBase64Image(null)
+    setCroppedImage(null)
+    setCropImageInProgress(false)
+  }
 
+  const handleSaveCroppedImage = async () => {
+    try {
+      const croppedImage = await getCroppedImg(
+        base64Image,
+        croppedAreaPixels,
+        rotation
+      )
+      setCroppedImage(croppedImage)
+      setCropImageInProgress(false)
+    } catch (e) {
+      console.error(e)
+    }
   }
 
 
@@ -148,17 +186,7 @@ const Profile = () => {
               borderColor: `${colors.dark}`,
             },
           }}
-          onClick={() => {
-            setUpdateInputs({
-              avatar: user?.avatar,
-              name: user?.name,
-              username: user?.username,
-              bio: user?.bio
-            })
-            setErrors(initial)
-            setOpenModal(true)
-            setCropImageInProgress(false)
-          }}
+          onClick={handleEditProfileClick}
 
           variant="outlined">
           Edit Profile
@@ -222,7 +250,10 @@ const Profile = () => {
               onBackClick={() => setOpenModal(false)}
               startIcon={
                 cropImageInProgress ?
-                  <IconButton size='large' onClick={() => { setCropImageInProgress(false) }} >
+                  <IconButton size='large' onClick={() => {
+                    setBase64Image(null)
+                    setCropImageInProgress(false)
+                  }} >
                     <ArrowBackIcon fontSize="inherit" />
                   </IconButton>
                   :
@@ -258,11 +289,22 @@ const Profile = () => {
 
             {
               cropImageInProgress ?
-                <StyledImageCropper screenWidth={width} image={base64Image} /> :
+                <StyledImageCropper
+                  screenWidth={width}
+                  image={base64Image}
+                  crop={crop}
+                  setCrop={setCrop}
+                  zoom={zoom}
+                  setZoom={setZoom}
+                  rotation={rotation}
+                  setRotation={setRotation}
+                  onCropComplete={onCropComplete}
+                /> :
                 <EditProfile
                   screenWidth={width}
                   user={{ ...user, uid }}
                   errors={errors}
+                  croppedImage={croppedImage}
                   updateInputs={updateInputs}
                   setUpdateInputs={setUpdateInputs}
                   setBase64Image={setBase64Image}
