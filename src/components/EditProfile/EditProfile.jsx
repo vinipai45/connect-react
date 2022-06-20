@@ -8,9 +8,20 @@ import colors from '../../utils/_colors.scss';
 import FileUploader from '../FileUploader/FileUploader';
 
 import { firebase } from '../../services/firebase'
+import { fileToBase64 } from '../../utils/helper-functions/converters';
 
 
-const EditProfile = ({ user, style, errors, screenWidth, updateInputs, setUpdateInputs }) => {
+const EditProfile = ({
+    user,
+    style,
+    errors,
+    screenWidth,
+    updateInputs,
+    setUpdateInputs,
+    setBase64Image,
+    setCropImageInProgress,
+    setOpenModal
+}) => {
 
 
     const storage = firebase.storage()
@@ -23,25 +34,37 @@ const EditProfile = ({ user, style, errors, screenWidth, updateInputs, setUpdate
         })
     }
 
-    const handleFileChange = (e) => {
+    const handleFileChange = async (e) => {
         const fileUploaded = e.target.files[0];
 
-        storage.ref(`/avatar/${user.uid}`).put(fileUploaded)
-            .on(
-                "state_changed",
-                Toast.fire({
-                    icon: 'success',
-                    title: `upload successful`
-                }),
-                alert,
-                storage.ref(`avatar`).child(`${user.uid}`).getDownloadURL().then(
-                    (url) => {
-                        setUpdateInputs({
-                            ...updateInputs,
-                            avatar: url
-                        });
-                    })
-            );
+        console.log(fileUploaded)
+
+        let base64Url = await fileToBase64(fileUploaded)
+
+        console.log(base64Url, "base64Url")
+
+        setBase64Image(base64Url)
+
+        if (base64Url) {
+            setCropImageInProgress(true)
+        }
+
+        // storage.ref(`/avatar/${user.uid}`).put(fileUploaded)
+        //     .on(
+        //         "state_changed",
+        //         Toast.fire({
+        //             icon: 'success',
+        //             title: `upload successful`
+        //         }),
+        //         alert,
+        //         storage.ref(`avatar`).child(`${user.uid}`).getDownloadURL().then(
+        //             (url) => {
+        //                 setUpdateInputs({
+        //                     ...updateInputs,
+        //                     avatar: url
+        //                 });
+        //             })
+        //     );
 
 
     }

@@ -16,7 +16,7 @@ const FileUploader = ({ icon, handleFileChange }) => {
             </IconButton>
             <input
                 type="file"
-                accept="image/png, image/jpeg image/webp"
+                accept="image/png, image/jpeg,image/jpg, image/webp"
                 ref={hiddenFileInput}
                 style={{ display: 'none' }}
                 onChange={handleFileChange}

@@ -5,10 +5,12 @@ import { useSelector } from 'react-redux';
 import { Box, Button, IconButton, Typography, Tooltip } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import TopBar from '../../components/TopBar/TopBar';
 import AppModal from '../../components/AppModal/AppModal';
 import EditProfile from '../../components/EditProfile/EditProfile';
+import StyledImageCropper from '../../components/ImageCropper/ImageCropper';
 
 import './Profile.scss'
 import colors from '../../utils/_colors.scss';
@@ -33,6 +35,8 @@ const Profile = () => {
     username: ''
   }
   const [user, setUser] = useState()
+  const [base64Image, setBase64Image] = useState()
+  const [cropImageInProgress, setCropImageInProgress] = useState(false)
   const [updateInputs, setUpdateInputs] = useState()
   const [errors, setErrors] = useState(initial)
   const [openModal, setOpenModal] = useState(false)
@@ -95,6 +99,10 @@ const Profile = () => {
 
   }
 
+  const handleSaveCroppedImage = () => {
+
+  }
+
 
 
   return (
@@ -149,6 +157,7 @@ const Profile = () => {
             })
             setErrors(initial)
             setOpenModal(true)
+            setCropImageInProgress(false)
           }}
 
           variant="outlined">
@@ -209,29 +218,64 @@ const Profile = () => {
             onClose={() => setOpenModal(false)}
           >
             <TopBar
-              title="Edit Profile"
+              title={cropImageInProgress ? "Edit Avatar" : "Edit Profile"}
               onBackClick={() => setOpenModal(false)}
               startIcon={
-                <IconButton size='large' onClick={() => { setOpenModal(false) }} >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
+                cropImageInProgress ?
+                  <IconButton size='large' onClick={() => { setCropImageInProgress(false) }} >
+                    <ArrowBackIcon fontSize="inherit" />
+                  </IconButton>
+                  :
+                  <IconButton size='large' onClick={() => { setOpenModal(false) }} >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
               }
               endIcon={
-                <Tooltip title="Save">
-                  <IconButton
-                    size='large'
-                    sx={{ color: '#388e3c' }}
-                    onClick={handleUpdate}
-                  >
-                    <CheckCircleIcon fontSize="inherit" />
-                  </IconButton>
-                </Tooltip>
+                cropImageInProgress ?
+                  <Button
+                    onClick={handleSaveCroppedImage}
+                    variant='contained'
+                    sx={{
+                      backgroundColor: 'black',
+                      color: 'white',
+                      borderRadius: '20px',
+                      fontWeight: '600'
+                    }}>
+                    Apply
+                  </Button>
+                  :
+                  <Tooltip title="Save">
+                    <IconButton
+                      size='large'
+                      sx={{ color: '#388e3c' }}
+                      onClick={handleUpdate}
+                    >
+                      <CheckCircleIcon fontSize="inherit" />
+                    </IconButton>
+                  </Tooltip>
               }
             />
 
-            <EditProfile screenWidth={width} user={{ ...user, uid }} errors={errors} updateInputs={updateInputs} setUpdateInputs={setUpdateInputs} />
+            {
+              cropImageInProgress ?
+                <StyledImageCropper screenWidth={width} image={base64Image} /> :
+                <EditProfile
+                  screenWidth={width}
+                  user={{ ...user, uid }}
+                  errors={errors}
+                  updateInputs={updateInputs}
+                  setUpdateInputs={setUpdateInputs}
+                  setBase64Image={setBase64Image}
+                  setOpenModal={setOpenModal}
+                  setCropImageInProgress={setCropImageInProgress}
+                />
+            }
+
+
+
           </AppModal> : <></>
       }
+
 
     </div >
   )
