@@ -15,16 +15,21 @@ import getCroppedImg from '../../components/ImageCropper/cropImage'
 
 import './Profile.scss'
 import colors from '../../utils/_colors.scss';
+import { firebase } from '../../services/firebase'
 import UserDB from '../../services/UserDB/UserDB';
 import { auth_user, tabBreakpoint } from '../../utils/constants'
 import { validateUpdateProfileInputs } from '../../validations/updateprofile.validations';
 import { firebaseExceptionHandler } from '../../services/FirebaseExceptionHandler';
+import { urltoFile } from '../../utils/helper-functions/converters';
 
 const Profile = () => {
   const { width, setActive } = useOutletContext();
   const { uid } = JSON.parse(localStorage.getItem(auth_user))
 
   let navigate = useNavigate()
+
+  let storage = firebase.storage()
+
   let Toast = useSelector((s) => s.toast);
 
   const userDB = new UserDB();
@@ -36,6 +41,7 @@ const Profile = () => {
   }
   const [user, setUser] = useState()
   const [base64Image, setBase64Image] = useState()
+  const [fileType, setFileType] = useState()
   const [cropImageInProgress, setCropImageInProgress] = useState(false)
   const [updateInputs, setUpdateInputs] = useState()
   const [errors, setErrors] = useState(initial)
@@ -109,6 +115,14 @@ const Profile = () => {
 
   }
 
+  const resetImageCropProperties = () => {
+    setCrop({ x: 0, y: 0 })
+    setRotation(0)
+    setZoom(1)
+    setCroppedAreaPixels(null)
+    setFileType(null)
+  }
+
   const handleEditProfileClick = async () => {
     setUpdateInputs({
       avatar: user?.avatar,
@@ -118,10 +132,7 @@ const Profile = () => {
     })
     setErrors(initial)
     setOpenModal(true)
-    setCrop({ x: 0, y: 0 })
-    setRotation(0)
-    setZoom(1)
-    setCroppedAreaPixels(null)
+    resetImageCropProperties()
     setBase64Image(null)
     setCroppedImage(null)
     setCropImageInProgress(false)
@@ -129,16 +140,64 @@ const Profile = () => {
 
   const handleSaveCroppedImage = async () => {
     try {
-      const croppedImage = await getCroppedImg(
+      const croppedBlobImage = await getCroppedImg(
         base64Image,
         croppedAreaPixels,
-        rotation
+        rotation,
+        fileType
       )
-      setCroppedImage(croppedImage)
+      setCroppedImage(croppedBlobImage)
       setCropImageInProgress(false)
     } catch (e) {
       console.error(e)
     }
+  }
+
+  useEffect(() => {
+    if (croppedImage) {
+      console.log(croppedImage, "croppedImage")
+
+      async function store() {
+        let imageFile = await urltoFile(croppedImage.toString(), uid.toString(), fileType)
+        storeAvatarToFirestore(imageFile)
+      }
+      store()
+
+
+
+
+
+    }
+  }, [croppedImage])
+
+  const storeAvatarToFirestore = (image) => {
+    try {
+      console.log(image)
+
+      storage.ref(`/avatar/${uid}`).put(image)
+        .on(
+          "state_changed",
+          Toast.fire({
+            icon: 'success',
+            title: `upload successful`
+          }),
+          alert,
+          () => storage.ref(`avatar`).child(`${uid}`).getDownloadURL().then(
+            (url) => {
+              setUpdateInputs({
+                ...updateInputs,
+                avatar: url
+              });
+            })
+        );
+    } catch (err) {
+      console.log(err, "err")
+      Toast.fire({
+        icon: 'error',
+        title: `could not save avatar`
+      })
+    }
+
   }
 
 
@@ -306,8 +365,10 @@ const Profile = () => {
                   errors={errors}
                   croppedImage={croppedImage}
                   updateInputs={updateInputs}
+                  resetImageCropProperties={resetImageCropProperties}
                   setUpdateInputs={setUpdateInputs}
                   setBase64Image={setBase64Image}
+                  setFileType={setFileType}
                   setOpenModal={setOpenModal}
                   setCropImageInProgress={setCropImageInProgress}
                 />

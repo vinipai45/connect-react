@@ -19,14 +19,15 @@ const EditProfile = ({
     updateInputs,
     croppedImage,
     setUpdateInputs,
+    setFileType,
     setBase64Image,
     setCropImageInProgress,
-    setOpenModal
+    setOpenModal,
+    resetImageCropProperties
 }) => {
 
 
-    const storage = firebase.storage()
-    let Toast = useSelector((s) => s.toast);
+
 
     const handleChange = (e) => {
         setUpdateInputs({
@@ -36,13 +37,15 @@ const EditProfile = ({
     }
 
     const handleFileChange = async (e) => {
+
+        resetImageCropProperties()
+
         const fileUploaded = e.target.files[0];
 
         console.log(fileUploaded)
+        setFileType(fileUploaded.type)
 
         let base64Url = await fileToBase64(fileUploaded)
-
-        console.log(base64Url, "base64Url")
 
         setBase64Image(base64Url)
 
@@ -50,22 +53,7 @@ const EditProfile = ({
             setCropImageInProgress(true)
         }
 
-        // storage.ref(`/avatar/${user.uid}`).put(fileUploaded)
-        //     .on(
-        //         "state_changed",
-        //         Toast.fire({
-        //             icon: 'success',
-        //             title: `upload successful`
-        //         }),
-        //         alert,
-        //         storage.ref(`avatar`).child(`${user.uid}`).getDownloadURL().then(
-        //             (url) => {
-        //                 setUpdateInputs({
-        //                     ...updateInputs,
-        //                     avatar: url
-        //                 });
-        //             })
-        //     );
+
 
 
     }
@@ -87,7 +75,7 @@ const EditProfile = ({
                 backgroundColor: `${colors.primaryColor}`,
             }} />
             <Box sx={{ position: 'relative' }}>
-                <img src={croppedImage ? croppedImage : updateInputs?.avatar} alt=""
+                <img src={updateInputs?.avatar} alt=""
                     style={{
                         border: `1px solid ${colors.white}`,
                         background: `${colors.white}`,
