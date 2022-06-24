@@ -1,6 +1,5 @@
 import { firebase } from "../firebase"
 import { USERS } from "../Database/collections";
-import userEvent from "@testing-library/user-event";
 import { getNameSearchArray } from "../../utils/helper-functions/generators";
 class UserDB {
     async search(searchText) {

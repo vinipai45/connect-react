@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useEffect } from 'react';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Box, Button, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import TopBar from '../../components/TopBar/TopBar'
@@ -11,6 +12,7 @@ import UserDB from '../../services/UserDB/UserDB';
 
 import './PeopleProfile.scss'
 import colors from '../../utils/_colors.scss';
+
 
 const PeopleProfile = () => {
 
@@ -65,7 +67,10 @@ const PeopleProfile = () => {
 
             <Box sx={{ display: 'flex' }} >
 
-                <img src={user?.avatar} alt=""
+                <LazyLoadImage
+                    src={user?.avatar} // use normal <img> attributes as props
+                    alt="alt"
+                    effect="blur"
                     style={{
                         border: `1px solid ${colors.white}`,
                         background: `${colors.white}`,

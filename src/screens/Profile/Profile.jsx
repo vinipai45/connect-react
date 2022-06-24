@@ -2,7 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { Box, Button, IconButton, Typography, Tooltip } from '@mui/material';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { Box, Button, IconButton, Typography, Tooltip, Skeleton } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -213,7 +214,10 @@ const Profile = () => {
 
       <Box sx={{ display: 'flex' }} >
 
-        <img src={user?.avatar} alt=""
+        <LazyLoadImage
+          src={user?.avatar} // use normal <img> attributes as props
+          alt="alt"
+          effect="blur"
           style={{
             border: `1px solid ${colors.white}`,
             background: `${colors.white}`,

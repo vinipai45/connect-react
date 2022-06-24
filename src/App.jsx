@@ -17,6 +17,7 @@ import Notifications from './screens/Notifications/Notifications';
 import PeopleProfile from './screens/PeopleProfile/PeopleProfile';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 function App() {
 
