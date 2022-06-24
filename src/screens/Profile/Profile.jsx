@@ -155,18 +155,11 @@ const Profile = () => {
 
   useEffect(() => {
     if (croppedImage) {
-      console.log(croppedImage, "croppedImage")
-
       async function store() {
         let imageFile = await urltoFile(croppedImage.toString(), uid.toString(), fileType)
         storeAvatarToFirestore(imageFile)
       }
       store()
-
-
-
-
-
     }
   }, [croppedImage])
 
@@ -176,12 +169,15 @@ const Profile = () => {
 
       storage.ref(`/avatar/${uid}`).put(image)
         .on(
-          "state_changed",
-          Toast.fire({
+          firebase.storage.TaskEvent.STATE_CHANGED,
+          () => Toast.fire({
             icon: 'success',
             title: `upload successful`
           }),
-          alert,
+          () => Toast.fire({
+            icon: 'error',
+            title: `something went wrong`
+          }),
           () => storage.ref(`avatar`).child(`${uid}`).getDownloadURL().then(
             (url) => {
               setUpdateInputs({
