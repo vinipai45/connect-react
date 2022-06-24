@@ -48,6 +48,33 @@ class UserDB {
 
     }
 
+    async getByUsername(username) {
+        try {
+            if (!firebase) {
+                return false
+            }
+
+            const snapshot = await firebase
+                .firestore()
+                .collection(USERS)
+                .where("username", "==", username)
+                .get()
+
+            let result = snapshot.docs.map(doc => doc.data());
+
+            if (result) {
+                delete result['namesearch']
+            }
+
+            return result
+
+        } catch (err) {
+            console.log(' User -> getByUsername', err)
+            return false
+        }
+
+    }
+
     async update(id, user) {
         try {
             if (!firebase) {

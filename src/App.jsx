@@ -14,6 +14,7 @@ import Profile from './screens/Profile/Profile';
 import Home from './screens/Home/Home';
 import Search from './screens/Search/Search';
 import Notifications from './screens/Notifications/Notifications';
+import PeopleProfile from './screens/PeopleProfile/PeopleProfile';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -36,7 +37,8 @@ function App() {
               <Layout />
             </PrivateRoute>
           } >
-            <Route path="/profile" element={<Profile />} />
+            <Route exact path="/profile" element={<Profile />} />
+            <Route exact path="/profile/:username" element={<PeopleProfile />} />
             <Route path="/home" element={<Home />} />
             <Route path="/search" element={<Search />} />
             <Route path="/notifications" element={<Notifications />} />

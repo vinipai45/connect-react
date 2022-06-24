@@ -71,7 +71,7 @@ const Profile = () => {
       }
     }
     getUserDetail()
-
+    console.log("Profile.jsx")
   }, [])
 
   const handleUpdate = async () => {
