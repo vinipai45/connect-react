@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useOutletContext } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 
 import { Box } from '@mui/material'
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -17,6 +17,9 @@ const Search = () => {
 
     const [searchText, setSearchText] = useState("")
     const [results, setResults] = useState([])
+    const [selectedUser, setSelectedUser] = useState()
+
+    let navigate = useNavigate()
 
     let userDB = new UserDB()
     let { width, height, setActive } = useOutletContext()
@@ -52,6 +55,18 @@ const Search = () => {
     };
 
 
+    useEffect(() => {
+        if (selectedUser) {
+            navigate(`/profile/${selectedUser?.username}`)
+        }
+    }, [selectedUser])
+
+    const handleProfileVisit = (item) => {
+        console.log(item)
+        // navigate(`/profile/${}`)
+    }
+
+
     return (
         <InfiniteScroll
             dataLength={results.length}
@@ -81,7 +96,7 @@ const Search = () => {
                             {
                                 results.map((item, index) => (
                                     <div key={item?.username}>
-                                        <SearchItem item={item} />
+                                        <SearchItem item={item} setSelectedUser={setSelectedUser} />
                                         {index === results?.length - 1 ? <></> : <hr />}
                                     </div>
                                 ))

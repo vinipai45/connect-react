@@ -53,7 +53,9 @@ const PeopleProfile = () => {
                 paddingRight: width < 1200 ? 0 : '20%',
             }}
         >
-            <TopBar title={user?.name ? user?.name : "Back To Home"} />
+            <TopBar title={user?.name ? user?.name : "Back To Home"}
+                onBackClick={() => { navigate('/search') }}
+            />
 
             <Box sx={{
                 width: '100%',
