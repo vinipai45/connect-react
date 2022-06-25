@@ -1,5 +1,5 @@
 import { firebase } from "../firebase"
-import { USERS } from "../Database/collections";
+import { USERS, PENDING } from "../Database/collections";
 import { getNameSearchArray } from "../../utils/helper-functions/generators";
 class UserDB {
     async search(searchText) {
@@ -38,7 +38,7 @@ class UserDB {
             let result = snapshot.data()
             delete result['namesearch']
 
-            return result
+            return { ...result, id }
 
         } catch (err) {
             console.log(' User -> getById', err)
@@ -59,7 +59,12 @@ class UserDB {
                 .where("username", "==", username)
                 .get()
 
-            let result = snapshot.docs.map(doc => doc.data());
+            let result = snapshot.docs.map(doc => {
+                return {
+                    id: doc.id,
+                    ...doc.data()
+                }
+            });
 
             if (result) {
                 delete result['namesearch']
@@ -103,6 +108,30 @@ class UserDB {
             return false
         }
     }
+
+    async followUser(senderId, recieverId) {
+        try {
+            if (!firebase) {
+                return false
+            }
+
+            await firebase
+                .firestore()
+                .collection(PENDING)
+                .doc(recieverId)
+                .set(
+                    {
+                        users: firebase.firestore.FieldValue.arrayUnion(senderId)
+                    },
+                    { merge: true }
+                )
+
+        } catch (err) {
+            console.log('UserDB -> followUser', err)
+        }
+    }
+
+
 }
 
 export default UserDB

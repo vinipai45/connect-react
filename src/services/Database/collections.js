@@ -1,3 +1,4 @@
 const USERS = "users"
+const PENDING = "pending"
 
-export { USERS }
+export { USERS, PENDING }

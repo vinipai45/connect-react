@@ -61,12 +61,6 @@ const Search = () => {
         }
     }, [selectedUser])
 
-    const handleProfileVisit = (item) => {
-        console.log(item)
-        // navigate(`/profile/${}`)
-    }
-
-
     return (
         <InfiniteScroll
             dataLength={results.length}

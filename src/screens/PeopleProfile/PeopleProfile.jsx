@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -17,37 +17,45 @@ import colors from '../../utils/_colors.scss';
 const PeopleProfile = () => {
 
     const { width, setActive } = useOutletContext();
-    const userDB = new UserDB();
-
     let { username } = useParams()
+
+    const userDB = new UserDB();
     let navigate = useNavigate()
-    const { uid } = JSON.parse(localStorage.getItem(auth_user))
+
+
+    let Toast = useSelector((s) => s.toast);
+    let reduxUser = useSelector((s) => s.user.initial);
 
     const [user, setUser] = useState()
     const [isLoggedInUser, setIsLoggedInUser] = useState(true)
 
-    useEffect(() => {
-        async function fetchUser() {
-            let result = await userDB.getByUsername(username)
-            let user = await userDB.getById(uid)
-            if (!user) {
-                navigate('/logout')
-            }
 
+    const fetchUser = () => {
+        userDB.getByUsername(username).then(result => {
             if (result.length > 0) {
-                if (!(user.username === result[0].username)) {
+                if (!(reduxUser.id === result[0].id)) {
                     setIsLoggedInUser(false)
                 }
                 setUser(result[0])
             }
-        };
-        fetchUser()
-
-    }, [])
+        })
+    };
 
     useEffect(() => {
         setActive('profile')
-    })
+        fetchUser()
+    }, [])
+
+
+    const handleFollow = async () => {
+        let result = await userDB.followUser(reduxUser.id, user.id)
+        if (result) {
+            Toast.fire({
+                icon: 'success',
+                title: `success`
+            })
+        }
+    }
 
     return (
         <div className='_people_profile_container'
@@ -99,7 +107,7 @@ const PeopleProfile = () => {
                         },
                     }}
                     endIcon={<AddIcon />}
-                    // onClick={handleEditProfileClick}
+                    onClick={handleFollow}
 
                     variant="contained">
                     Follow

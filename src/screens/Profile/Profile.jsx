@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -27,11 +27,10 @@ const Profile = () => {
   const { width, setActive } = useOutletContext();
   const { uid } = JSON.parse(localStorage.getItem(auth_user))
 
-  let navigate = useNavigate()
-
   let storage = firebase.storage()
 
   let Toast = useSelector((s) => s.toast);
+  let reduxUser = useSelector((s) => s.user.initial);
 
   const userDB = new UserDB();
   const initial = {
@@ -54,6 +53,7 @@ const Profile = () => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
   const [croppedImage, setCroppedImage] = useState(null)
 
+
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels)
   }, [])
@@ -63,17 +63,8 @@ const Profile = () => {
   }, [])
 
   useEffect(() => {
-    async function getUserDetail() {
-      let user = await userDB.getById(uid)
-      if (user) {
-        setUser(user)
-      } else {
-        navigate('/logout')
-      }
-    }
-    getUserDetail()
-    console.log("Profile.jsx")
-  }, [])
+    setUser(reduxUser)
+  }, [reduxUser])
 
   const handleUpdate = async () => {
     try {

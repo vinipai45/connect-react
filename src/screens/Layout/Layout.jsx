@@ -1,31 +1,57 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { Outlet, useNavigate } from 'react-router-dom';
+
 import BottomNav from '../../components/BottomNav/BottomNav';
 import { Sidenav, SidenavMini } from '../../components/Sidenav/Sidenav'
-import { Outlet } from 'react-router-dom';
 
-import { tabBreakpoint, mobileBreakpoint } from '../../utils/constants';
+import { tabBreakpoint, mobileBreakpoint, auth_user } from '../../utils/constants';
+import { user } from '../../redux/consts';
+import UserDB from '../../services/UserDB/UserDB';
 // import { useNavigate } from 'react-router-dom'
 
 import './Layout.scss'
 import colors from '../../utils/_colors.scss';
-import TopBar from '../../components/TopBar/TopBar';
 
 const Layout = () => {
-    // let navigate = useNavigate()
+    let navigate = useNavigate()
 
     const [active, setActive] = useState('home')
     const [width, setWidth] = React.useState(window.innerWidth);
     const [height, setHeight] = React.useState(window.innerHeight);
 
-    useEffect(() => {
+    let dispatch = useDispatch()
+
+    useEffect(async () => {
+
         const handleWindowResize = () => {
             setHeight(window.innerHeight)
             setWidth(window.innerWidth)
         }
         window.addEventListener("resize", handleWindowResize);
+        await getUserDetails()
 
         return () => window.removeEventListener("resize", handleWindowResize);
+
+
     }, [])
+
+    const getUserDetails = async () => {
+        let userDB = new UserDB()
+        const { uid } = JSON.parse(localStorage.getItem(auth_user))
+        let userDetails = await userDB.getById(uid)
+
+        if (userDetails) {
+            dispatch({
+                type: user,
+                payLoad: {
+                    initial: { ...userDetails }
+                },
+            });
+        } else {
+            navigate('/logout')
+        }
+    }
 
 
     return (
