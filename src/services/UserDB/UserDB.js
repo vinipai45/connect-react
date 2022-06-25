@@ -191,7 +191,35 @@ class UserDB {
             return result?.users
         } catch (err) {
             console.log('UserDB -> listPendingRequests', err)
+        }
+    }
 
+    async isFollowing(followerId, followingId) {
+        console.log(followerId, "followerId")
+        console.log(followingId, "followingId")
+        try {
+            if (!firebase) {
+                return false
+            }
+
+            const snapshot = await firebase
+                .firestore()
+                .collection(FOLLOWERS)
+                .doc(followingId)
+                .get()
+
+
+            let { users } = snapshot.data()
+
+            if (!users.includes(followerId)) {
+                return false
+            }
+
+            return true
+
+
+        } catch (err) {
+            console.log('UserDB -> isFollowing', err)
         }
     }
 

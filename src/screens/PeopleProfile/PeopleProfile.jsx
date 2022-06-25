@@ -5,6 +5,7 @@ import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Box, Button, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import CheckIcon from '@mui/icons-material/Check';
 import TopBar from '../../components/TopBar/TopBar'
 
 import { tabBreakpoint } from '../../utils/constants'
@@ -29,6 +30,7 @@ const PeopleProfile = () => {
     const [user, setUser] = useState()
     const [currentUser, setCurrentUser] = useState()
     const [isLoggedInUser, setIsLoggedInUser] = useState(true)
+    const [isFollowing, setIsFollowing] = useState(false)
 
 
     const fetchUser = () => {
@@ -51,10 +53,20 @@ const PeopleProfile = () => {
     }, [reduxUser])
 
     useEffect(() => {
+
         if (currentUser && user) {
-            if (!(currentUser.id === user?.id)) {
-                setIsLoggedInUser(false)
+            async function fetchData() {
+                if (!(currentUser.id === user?.id)) {
+                    setIsLoggedInUser(false)
+                }
+                console.log(currentUser.id, "currentUser.id")
+                console.log(user?.id, "user?.id")
+                let followStatus = await userDB.isFollowing(currentUser.id, user?.id)
+                console.log(followStatus, "followStatus")
+                setIsFollowing(followStatus)
             }
+            fetchData()
+
         }
     }, [user, currentUser])
 
@@ -118,11 +130,11 @@ const PeopleProfile = () => {
                             borderColor: `${colors.dark}`,
                         },
                     }}
-                    endIcon={<AddIcon />}
+                    endIcon={isFollowing ? <CheckIcon /> : <AddIcon />}
                     onClick={handleFollow}
 
                     variant="contained">
-                    Follow
+                    {isFollowing ? "Following" : "Follow"}
                 </Button> : <></>}
             </Box>
 
