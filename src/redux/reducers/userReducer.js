@@ -17,7 +17,6 @@ const init = {
 export function userRed(state = init, action) {
     switch (action.type) {
         case type.user:
-            console.log(action.payLoad, "payload")
             return action.payLoad;
         default:
             return state;

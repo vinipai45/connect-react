@@ -27,15 +27,13 @@ const PeopleProfile = () => {
     let reduxUser = useSelector((s) => s.user.initial);
 
     const [user, setUser] = useState()
+    const [currentUser, setCurrentUser] = useState()
     const [isLoggedInUser, setIsLoggedInUser] = useState(true)
 
 
     const fetchUser = () => {
         userDB.getByUsername(username).then(result => {
             if (result.length > 0) {
-                if (!(reduxUser.id === result[0].id)) {
-                    setIsLoggedInUser(false)
-                }
                 setUser(result[0])
             }
         })
@@ -45,6 +43,20 @@ const PeopleProfile = () => {
         setActive('profile')
         fetchUser()
     }, [])
+
+    useEffect(() => {
+        if (reduxUser.id.length > 0) {
+            setCurrentUser(reduxUser)
+        }
+    }, [reduxUser])
+
+    useEffect(() => {
+        if (currentUser && user) {
+            if (!(currentUser.id === user?.id)) {
+                setIsLoggedInUser(false)
+            }
+        }
+    }, [user, currentUser])
 
 
     const handleFollow = async () => {
