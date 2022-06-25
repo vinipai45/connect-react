@@ -28,18 +28,24 @@ const Notifications = () => {
 
     const fetchPendingList = async (reduxUser) => {
         if (reduxUser?.id?.length > 0) {
+
             let userResults = []
 
             let userIds = await userDB.listPendingRequests(reduxUser.id)
 
-            for (let i = 0; i < userIds.length; i++) {
 
-                let res = await userDB.getById(userIds[i])
-                if (res) {
-                    userResults.push(res)
-                }
-
+            if (userIds?.length > 0) {
+                userResults = await userDB.getMultipleUsers(userIds)
             }
+
+            // for (let i = 0; i < userIds.length; i++) {
+
+            //     let res = await userDB.getById(userIds[i])
+            //     if (res) {
+            //         userResults.push(res)
+            //     }
+
+            // }
 
             setResults(userResults)
 

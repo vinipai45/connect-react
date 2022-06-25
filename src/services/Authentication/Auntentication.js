@@ -49,7 +49,7 @@ class Authentication {
                 }
 
                 if (isNewUser) {
-                    await this.authDB.saveUserToDB(uid, data)
+                    await this.authDB.saveUserToDB(uid, { id: uid, ...data })
 
                 }
 
@@ -122,7 +122,7 @@ class Authentication {
                     gender: inputs.gender
                 }
 
-                let savedUser = await this.authDB.saveUserToDB(user.uid, data)
+                let savedUser = await this.authDB.saveUserToDB(user.uid, { id: user.uid, ...data })
 
                 if (!savedUser) {
                     return resolve(false)

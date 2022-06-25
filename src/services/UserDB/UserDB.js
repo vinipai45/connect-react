@@ -47,6 +47,26 @@ class UserDB {
 
     }
 
+    async getMultipleUsers(ids) {
+        try {
+            if (!firebase) {
+                return false
+            }
+
+            const snapshot = await firebase
+                .firestore()
+                .collection(USERS)
+                .where("id", "in", ids)
+                .get()
+
+            return snapshot.docs.map(doc => doc.data());
+
+
+        } catch (err) {
+            console.log('UserDB -> getMultipleUsers', err)
+        }
+    }
+
     async getByUsername(username) {
         try {
             if (!firebase) {
@@ -187,7 +207,6 @@ class UserDB {
                 .get()
 
             let result = snapshot.data()
-
             return result?.users
         } catch (err) {
             console.log('UserDB -> listPendingRequests', err)
