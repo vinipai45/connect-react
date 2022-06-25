@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, } from 'react-router-dom';
 
 import PrivateRoute from './utils/helper-functions/PrivateRoute'
-import { firebase } from './services/firebase'
 
 import NotFound from './components/NotFound/NotFound';
 import Layout from './screens/Layout/Layout'
@@ -20,13 +19,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 function App() {
-
-
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      console.log(user)
-    }
-  });
 
   return (
     <>

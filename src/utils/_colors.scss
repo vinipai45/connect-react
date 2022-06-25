@@ -7,6 +7,8 @@ $mediumGrey: #C4C4C4;
 $dark: #252837;
 $white :#fff;
 $primary_fade: #A6E6E1;
+$success: #388e3c;
+$danger: #f44336;
 
 :export {
     primary_fade: $primary_fade;
@@ -17,4 +19,6 @@ $primary_fade: #A6E6E1;
     lightGrey: $lightGrey;
     mediumGrey: $mediumGrey;
     white: $white;
+    success: $success;
+    danger: $danger;
 }

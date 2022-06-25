@@ -1,0 +1,8 @@
+._notification_container {
+    height: 100%;
+    // overflow-y: hidden;
+
+    @media (max-width:479px) {
+        height: calc(100% - 80px)
+    }
+}

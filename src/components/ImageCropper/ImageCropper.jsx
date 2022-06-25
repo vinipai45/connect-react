@@ -1,14 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Slider, Typography } from '@mui/material'
 import { withStyles } from '@mui/styles'
 import Cropper from 'react-easy-crop'
 
 import { styles } from './ImageCropper.styles'
-import TopBar from '../TopBar/TopBar'
-
-const dogImg =
-    'https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000'
-
 
 const ImageCropper = ({
     screenWidth,

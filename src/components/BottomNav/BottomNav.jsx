@@ -21,7 +21,7 @@ const BottomNav = ({ active, setActive }) => {
                     <BottomNavLink
                         key={item.key}
                         className={
-                            active == item.key ? '_bottom_nav_active_item' : ''
+                            active === item.key ? '_bottom_nav_active_item' : ''
                         }
                         Icon={item.icon}
                         onClick={() => {

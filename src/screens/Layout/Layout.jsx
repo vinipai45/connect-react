@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 import BottomNav from '../../components/BottomNav/BottomNav';
@@ -22,18 +22,20 @@ const Layout = () => {
 
     let dispatch = useDispatch()
 
-    useEffect(async () => {
+    useEffect(() => {
+        async function initSetup() {
+            const handleWindowResize = () => {
+                setHeight(window.innerHeight)
+                setWidth(window.innerWidth)
+            }
+            window.addEventListener("resize", handleWindowResize);
+            await getUserDetails()
 
-        const handleWindowResize = () => {
-            setHeight(window.innerHeight)
-            setWidth(window.innerWidth)
+            return () => window.removeEventListener("resize", handleWindowResize);
+
         }
-        window.addEventListener("resize", handleWindowResize);
-        await getUserDetails()
 
-        return () => window.removeEventListener("resize", handleWindowResize);
-
-
+        initSetup()
     }, [])
 
     const getUserDetails = async () => {

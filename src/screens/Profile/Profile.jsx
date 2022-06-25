@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import { Box, Button, IconButton, Typography, Tooltip, Skeleton } from '@mui/material';
+import { Box, Button, IconButton, Typography, Tooltip } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';

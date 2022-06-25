@@ -1,5 +1,5 @@
 import { firebase } from "../firebase"
-import { USERS, PENDING } from "../Database/collections";
+import { USERS, PENDING, FOLLOWERS, FOLLOWING } from "../Database/collections";
 import { getNameSearchArray } from "../../utils/helper-functions/generators";
 class UserDB {
     async search(searchText) {
@@ -109,7 +109,7 @@ class UserDB {
         }
     }
 
-    async followUser(senderId, recieverId) {
+    async sendFollowRequest(senderId, recieverId) {
         try {
             if (!firebase) {
                 return false
@@ -127,7 +127,71 @@ class UserDB {
                 )
 
         } catch (err) {
-            console.log('UserDB -> followUser', err)
+            console.log('UserDB -> sendFollowRequest', err)
+        }
+    }
+
+    async acceptFollowRequest(senderId, recieverId) {
+        try {
+            if (!firebase) {
+                return false
+            }
+
+            await firebase
+                .firestore()
+                .collection(PENDING)
+                .doc(recieverId)
+                .set(
+                    {
+                        users: firebase.firestore.FieldValue.arrayRemove(senderId)
+                    },
+                    { merge: true }
+                )
+
+            await firebase
+                .firestore()
+                .collection(FOLLOWERS)
+                .doc(recieverId)
+                .set(
+                    {
+                        users: firebase.firestore.FieldValue.arrayUnion(senderId)
+                    },
+                    { merge: true }
+                )
+            await firebase
+                .firestore()
+                .collection(FOLLOWING)
+                .doc(senderId)
+                .set(
+                    {
+                        users: firebase.firestore.FieldValue.arrayUnion(recieverId)
+                    },
+                    { merge: true }
+                )
+
+        } catch (err) {
+            console.log('UserDB -> acceptFollowRequest', err)
+        }
+    }
+
+    async listPendingRequests(id) {
+        try {
+            if (!firebase) {
+                return false
+            }
+
+            const snapshot = await firebase
+                .firestore()
+                .collection(PENDING)
+                .doc(id)
+                .get()
+
+            let result = snapshot.data()
+
+            return result?.users
+        } catch (err) {
+            console.log('UserDB -> listPendingRequests', err)
+
         }
     }
 

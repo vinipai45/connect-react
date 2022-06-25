@@ -7,7 +7,7 @@ import { Box, Button, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import TopBar from '../../components/TopBar/TopBar'
 
-import { auth_user, tabBreakpoint } from '../../utils/constants'
+import { tabBreakpoint } from '../../utils/constants'
 import UserDB from '../../services/UserDB/UserDB';
 
 import './PeopleProfile.scss'
@@ -60,7 +60,7 @@ const PeopleProfile = () => {
 
 
     const handleFollow = async () => {
-        let result = await userDB.followUser(reduxUser.id, user.id)
+        let result = await userDB.sendFollowRequest(reduxUser.id, user.id)
         if (result) {
             Toast.fire({
                 icon: 'success',
