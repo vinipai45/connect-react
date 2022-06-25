@@ -75,7 +75,7 @@ const Notifications = () => {
             fetchPendingList(reduxUser).then(() => {
                 Toast.fire({
                     icon: 'success',
-                    title: `${sender.name} is following you now`
+                    title: `${sender.name} is following you now!`
                 })
             })
         })

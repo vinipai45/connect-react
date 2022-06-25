@@ -221,6 +221,17 @@ class UserDB {
         }
     }
 
+    async unfollow(followerId, followingId) {
+        try {
+            if (!firebase) {
+                return false
+            }
+
+        } catch (err) {
+            console.log('UserDB -> unfollow', err)
+        }
+    }
+
 
 }
 

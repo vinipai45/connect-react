@@ -52,6 +52,11 @@ const PeopleProfile = () => {
         }
     }, [reduxUser])
 
+    const checkFollowStatus = async (currentUser, user) => {
+        let followStatus = await userDB.isFollowing(currentUser.id, user?.id)
+        setIsFollowing(followStatus)
+    }
+
     useEffect(() => {
 
         if (currentUser && user) {
@@ -59,8 +64,7 @@ const PeopleProfile = () => {
                 if (!(currentUser.id === user?.id)) {
                     setIsLoggedInUser(false)
                 }
-                let followStatus = await userDB.isFollowing(currentUser.id, user?.id)
-                setIsFollowing(followStatus)
+                await checkFollowStatus(currentUser, user)
             }
             fetchData()
 
