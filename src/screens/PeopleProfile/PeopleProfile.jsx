@@ -59,10 +59,7 @@ const PeopleProfile = () => {
                 if (!(currentUser.id === user?.id)) {
                     setIsLoggedInUser(false)
                 }
-                console.log(currentUser.id, "currentUser.id")
-                console.log(user?.id, "user?.id")
                 let followStatus = await userDB.isFollowing(currentUser.id, user?.id)
-                console.log(followStatus, "followStatus")
                 setIsFollowing(followStatus)
             }
             fetchData()

@@ -195,8 +195,6 @@ class UserDB {
     }
 
     async isFollowing(followerId, followingId) {
-        console.log(followerId, "followerId")
-        console.log(followingId, "followingId")
         try {
             if (!firebase) {
                 return false
