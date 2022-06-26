@@ -9,7 +9,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 
 import './NotificationItem.scss'
 
-const NotificationItem = ({ item, handleAcceptRequest }) => {
+const NotificationItem = ({ item, handleAcceptRequest, handleRejectRequest }) => {
 
 
     return (
@@ -65,7 +65,7 @@ const NotificationItem = ({ item, handleAcceptRequest }) => {
                     <IconButton
                         size='large'
                         sx={{ color: `${colors.danger}` }}
-                    // onClick={handleUpdate}
+                        onClick={() => handleRejectRequest(item)}
                     >
                         <CancelIcon fontSize="inherit" />
                     </IconButton>

@@ -87,6 +87,17 @@ const Notifications = () => {
         })
     }
 
+    const handleRejectRequest = (sender) => {
+        userDB.cancelFollowRequest(sender.id, reduxUser.id).then((res) => {
+            fetchPendingList(reduxUser).then(() => {
+                Toast.fire({
+                    icon: 'info',
+                    title: `${sender.name} request rejected!`
+                })
+            })
+        })
+    }
+
     return (
         <InfiniteScroll
             dataLength={results.length}
@@ -117,7 +128,11 @@ const Notifications = () => {
                             {
                                 results.map((item, index) => (
                                     <div key={item?.username}>
-                                        <NotificationItem item={item} handleAcceptRequest={handleAcceptRequest} />
+                                        <NotificationItem
+                                            item={item}
+                                            handleAcceptRequest={handleAcceptRequest}
+                                            handleRejectRequest={handleRejectRequest}
+                                        />
                                         {index === results?.length - 1 ? <></> : <hr />}
                                     </div>
                                 ))

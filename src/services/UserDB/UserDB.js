@@ -260,6 +260,10 @@ class UserDB {
     }
 
     async cancelFollowRequest(senderId, recieverId) {
+
+        console.log(senderId, "senderId")
+        console.log(recieverId, "recieverId")
+
         try {
             if (!firebase) {
                 return false
