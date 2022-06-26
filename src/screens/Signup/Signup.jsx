@@ -88,14 +88,6 @@ const Signup = () => {
 
             let authUser = await authentication.createUserWithEmailAndPassword(inputs)
 
-            if (!authUser) {
-                Toast.fire({
-                    icon: 'error',
-                    title: `could not save user`
-                })
-                setIsLoading(false)
-            }
-
             navigate('/login')
 
         } catch (error) {

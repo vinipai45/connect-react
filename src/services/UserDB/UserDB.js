@@ -196,18 +196,21 @@ class UserDB {
 
     async listPendingRequests(id) {
         try {
-            if (!firebase) {
-                return false
-            }
+            return new Promise((resolve, reject) => {
 
-            const snapshot = await firebase
-                .firestore()
-                .collection(PENDING)
-                .doc(id)
-                .get()
+                if (!firebase) {
+                    return resolve(false)
+                }
 
-            let result = snapshot.data()
-            return result?.users
+                firebase
+                    .firestore()
+                    .collection(PENDING)
+                    .doc(id)
+                    .onSnapshot((snapshot) => {
+                        return resolve(snapshot.data().users)
+                    })
+            })
+
         } catch (err) {
             console.log('UserDB -> listPendingRequests', err)
         }
