@@ -5,10 +5,11 @@ import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { Box, Button, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import TopBar from '../../components/TopBar/TopBar'
 
-import { tabBreakpoint } from '../../utils/constants'
+import { FOLLOW_STATUS, tabBreakpoint } from '../../utils/constants'
 import UserDB from '../../services/UserDB/UserDB';
 
 import './PeopleProfile.scss'
@@ -74,16 +75,25 @@ const PeopleProfile = () => {
 
     const handleFollow = async () => {
         try {
-            let result = await userDB.sendFollowRequest(reduxUser.id, user.id)
 
-            Toast.fire({
-                icon: 'info',
-                title: `sent request`
-            })
+            let result = null
 
-            result = await userDB.isFollowing(reduxUser.id, user.id)
+            if (isFollowing === FOLLOW_STATUS.FOLLOW) {
 
-            setIsFollowing(result)
+                await userDB.sendFollowRequest(reduxUser.id, user.id)
+
+                Toast.fire({
+                    icon: 'info',
+                    title: `sent request`
+                })
+            }
+
+            if (isFollowing === FOLLOW_STATUS.REQUESTED) {
+
+                await userDB.cancelFollowRequest(reduxUser.id, user.id)
+            }
+
+            result = await checkFollowStatus(reduxUser, user)
 
         } catch (err) {
             console.log('PeopleProfile -> handleFollow', err)
@@ -142,20 +152,20 @@ const PeopleProfile = () => {
                                     borderColor: `${colors.dark}`,
                                 },
                             }}
-                            disabled={isFollowing === "pending"}
+                            // disabled={isFollowing === FOLLOW_STATUS.REQUESTED}
                             endIcon={
-                                isFollowing === "following" ? <CheckIcon />
+                                isFollowing === FOLLOW_STATUS.FOLLOWING ? <CheckIcon />
                                     :
-                                    isFollowing === "yet to follow" ?
+                                    isFollowing === FOLLOW_STATUS.FOLLOW ?
                                         <AddIcon />
-                                        : <></>
+                                        : <CloseIcon />
                             }
                             onClick={handleFollow}
 
                             variant="contained">
                             {
-                                isFollowing === "pending" ? "Pending"
-                                    : isFollowing === "following" ? "Following"
+                                isFollowing === FOLLOW_STATUS.REQUESTED ? 'Requested'
+                                    : isFollowing === FOLLOW_STATUS.FOLLOWING ? "Following"
                                         : "Follow"
                             }
                         </Button> : <></>}
@@ -199,7 +209,7 @@ const PeopleProfile = () => {
             </Box>
 
 
-        </div>
+        </div >
     )
 }
 

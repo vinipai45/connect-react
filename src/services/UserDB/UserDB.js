@@ -1,6 +1,7 @@
 import { firebase } from "../firebase"
 import { USERS, PENDING, FOLLOWERS, FOLLOWING } from "../Database/collections";
 import { getNameSearchArray } from "../../utils/helper-functions/generators";
+import { FOLLOW_STATUS } from "../../utils/constants";
 class UserDB {
     async search(searchText) {
         try {
@@ -231,7 +232,7 @@ class UserDB {
             if (pendingSnapshot.data()) {
                 let { users } = pendingSnapshot.data()
                 if (users.includes(followerId)) {
-                    return 'pending'
+                    return FOLLOW_STATUS.REQUESTED
                 }
             }
 
@@ -245,16 +246,39 @@ class UserDB {
             if (snapshot.data()) {
                 let { users } = snapshot.data()
                 if (users.includes(followerId)) {
-                    return 'following'
+                    return FOLLOW_STATUS.FOLLOWING
                 }
             }
 
 
-            return 'yet to follow'
+            return FOLLOW_STATUS.FOLLOW
 
 
         } catch (err) {
             console.log('UserDB -> isFollowing', err)
+        }
+    }
+
+    async cancelFollowRequest(senderId, recieverId) {
+        try {
+            if (!firebase) {
+                return false
+            }
+
+            await firebase
+                .firestore()
+                .collection(PENDING)
+                .doc(recieverId)
+                .set(
+                    {
+                        users: firebase.firestore.FieldValue.arrayRemove(senderId)
+                    },
+                    { merge: true }
+                )
+
+
+        } catch (err) {
+            console.log('UserDB -> cancelFollowRequest', err)
         }
     }
 

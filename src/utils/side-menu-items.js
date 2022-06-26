@@ -68,20 +68,20 @@ const bottomNavItems = [
             <SearchIcon className="_bottom_nav_icon" />
         </IconButton>
     },
-    // {
-    //     label: "Notifications",
-    //     key: "notifications",
-    //     icon: <IconButton size="large">
-    //         <NotificationsNoneIcon className="_bottom_nav_icon" />
-    //     </IconButton>
-    // },
     {
-        label: "Messages",
-        key: "messages",
+        label: "Notifications",
+        key: "notifications",
         icon: <IconButton size="large">
-            <ChatBubbleOutlineIcon className="_bottom_nav_icon" />
+            <NotificationsNoneIcon className="_bottom_nav_icon" />
         </IconButton>
     },
+    // {
+    //     label: "Messages",
+    //     key: "messages",
+    //     icon: <IconButton size="large">
+    //         <ChatBubbleOutlineIcon className="_bottom_nav_icon" />
+    //     </IconButton>
+    // },
     // {
     //     label: "Bookmarks",
     //     key: "bookmarks",
