@@ -30,7 +30,7 @@ const PeopleProfile = () => {
     const [user, setUser] = useState()
     const [currentUser, setCurrentUser] = useState()
     const [isLoggedInUser, setIsLoggedInUser] = useState(true)
-    const [isFollowing, setIsFollowing] = useState(false)
+    const [isFollowing, setIsFollowing] = useState("")
 
 
     const fetchUser = () => {
@@ -73,13 +73,22 @@ const PeopleProfile = () => {
 
 
     const handleFollow = async () => {
-        let result = await userDB.sendFollowRequest(reduxUser.id, user.id)
-        if (result) {
+        try {
+            let result = await userDB.sendFollowRequest(reduxUser.id, user.id)
+
             Toast.fire({
-                icon: 'success',
-                title: `success`
+                icon: 'info',
+                title: `sent request`
             })
+
+            result = await userDB.isFollowing(reduxUser.id, user.id)
+
+            setIsFollowing(result)
+
+        } catch (err) {
+            console.log('PeopleProfile -> handleFollow', err)
         }
+
     }
 
     return (
@@ -116,27 +125,40 @@ const PeopleProfile = () => {
                     }}
                 />
 
-                {!isLoggedInUser ? <Button
-                    sx={{
-                        marginLeft: 'auto',
-                        marginRight: width < 1200 ? '10px' : '',
-                        marginTop: '20px',
-                        marginBottom: width < tabBreakpoint ? '30px' : '20px',
-                        textTransform: 'capitalize',
-                        fontWeight: 'bold',
-                        borderRadius: '10px',
-                        color: `${colors.white}`,
-                        borderColor: `${colors.mediumGrey}`,
-                        '&:hover': {
-                            borderColor: `${colors.dark}`,
-                        },
-                    }}
-                    endIcon={isFollowing ? <CheckIcon /> : <AddIcon />}
-                    onClick={handleFollow}
+                {
+                    !isLoggedInUser ?
+                        <Button
+                            sx={{
+                                marginLeft: 'auto',
+                                marginRight: width < 1200 ? '10px' : '',
+                                marginTop: '20px',
+                                marginBottom: width < tabBreakpoint ? '30px' : '20px',
+                                textTransform: 'capitalize',
+                                fontWeight: 'bold',
+                                borderRadius: '10px',
+                                color: `${colors.white}`,
+                                borderColor: `${colors.mediumGrey}`,
+                                '&:hover': {
+                                    borderColor: `${colors.dark}`,
+                                },
+                            }}
+                            disabled={isFollowing === "pending"}
+                            endIcon={
+                                isFollowing === "following" ? <CheckIcon />
+                                    :
+                                    isFollowing === "yet to follow" ?
+                                        <AddIcon />
+                                        : <></>
+                            }
+                            onClick={handleFollow}
 
-                    variant="contained">
-                    {isFollowing ? "Following" : "Follow"}
-                </Button> : <></>}
+                            variant="contained">
+                            {
+                                isFollowing === "pending" ? "Pending"
+                                    : isFollowing === "following" ? "Following"
+                                        : "Follow"
+                            }
+                        </Button> : <></>}
             </Box>
 
             <Box sx={{ margin: '0px 20px', }}>

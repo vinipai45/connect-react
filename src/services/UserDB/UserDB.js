@@ -219,20 +219,35 @@ class UserDB {
                 return false
             }
 
+            const pendingSnapshot = await firebase
+                .firestore()
+                .collection(PENDING)
+                .doc(followingId)
+                .get()
+
+            if (pendingSnapshot.data()) {
+                let { users } = pendingSnapshot.data()
+                if (users.includes(followerId)) {
+                    return 'pending'
+                }
+            }
+
+
             const snapshot = await firebase
                 .firestore()
                 .collection(FOLLOWERS)
                 .doc(followingId)
                 .get()
 
-
-            let { users } = snapshot.data()
-
-            if (!users.includes(followerId)) {
-                return false
+            if (snapshot.data()) {
+                let { users } = snapshot.data()
+                if (users.includes(followerId)) {
+                    return 'following'
+                }
             }
 
-            return true
+
+            return 'yet to follow'
 
 
         } catch (err) {
