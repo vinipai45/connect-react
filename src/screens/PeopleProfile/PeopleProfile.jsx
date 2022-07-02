@@ -72,6 +72,10 @@ const PeopleProfile = () => {
         }
     }, [user, currentUser])
 
+    useEffect(() => {
+        console.log(isFollowing)
+    }, [isFollowing])
+
 
     const handleFollow = async () => {
         try {
@@ -92,6 +96,12 @@ const PeopleProfile = () => {
 
                 await userDB.cancelFollowRequest(reduxUser.id, user.id)
             }
+
+            if (isFollowing === FOLLOW_STATUS.FOLLOWING) {
+
+                await userDB.unfollow(reduxUser.id, user.id)
+            }
+
 
             result = await checkFollowStatus(reduxUser, user)
 

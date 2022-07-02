@@ -286,12 +286,31 @@ class UserDB {
         }
     }
 
-    async unfollow(followerId, followingId) {
+    async unfollow(senderId, recieverId) {
         try {
             if (!firebase) {
                 return false
             }
-
+            await firebase
+                .firestore()
+                .collection(FOLLOWERS)
+                .doc(recieverId)
+                .set(
+                    {
+                        users: firebase.firestore.FieldValue.arrayRemove(senderId)
+                    },
+                    { merge: true }
+                )
+            await firebase
+                .firestore()
+                .collection(FOLLOWING)
+                .doc(senderId)
+                .set(
+                    {
+                        users: firebase.firestore.FieldValue.arrayRemove(recieverId)
+                    },
+                    { merge: true }
+                )
         } catch (err) {
             console.log('UserDB -> unfollow', err)
         }
