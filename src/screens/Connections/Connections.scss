@@ -1,0 +1,9 @@
+._connection_container {
+    // width: 100%;
+    height: 100%;
+    overflow-y: auto;
+
+    @media (max-width:479px) {
+        height: calc(100% - 80px)
+    }
+}

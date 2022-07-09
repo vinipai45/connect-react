@@ -10,22 +10,16 @@ import { fileToBase64 } from '../../utils/helper-functions/converters';
 
 
 const EditProfile = ({
-    user,
     style,
     errors,
     screenWidth,
     updateInputs,
-    croppedImage,
     setUpdateInputs,
     setFileType,
     setBase64Image,
     setCropImageInProgress,
-    setOpenModal,
     resetImageCropProperties
 }) => {
-
-
-
 
     const handleChange = (e) => {
         setUpdateInputs({
@@ -40,7 +34,6 @@ const EditProfile = ({
 
         const fileUploaded = e.target.files[0];
 
-        console.log(fileUploaded)
         setFileType(fileUploaded.type)
 
         let base64Url = await fileToBase64(fileUploaded)
@@ -51,11 +44,7 @@ const EditProfile = ({
             setCropImageInProgress(true)
         }
 
-
-
-
     }
-
 
     return (
         <Box

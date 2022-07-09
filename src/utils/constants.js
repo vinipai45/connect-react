@@ -6,6 +6,10 @@ const FOLLOW_STATUS = {
     FOLLOW: 'follow'
 
 }
+const CONNECTIONS = {
+    FOLLOWING: 'following',
+    FOLLOWERS: 'followers',
+}
 const tabBreakpoint = 960;
 const mobileBreakpoint = 480;
 
@@ -13,6 +17,7 @@ export {
     auth_token,
     auth_user,
     FOLLOW_STATUS,
+    CONNECTIONS,
     tabBreakpoint,
     mobileBreakpoint
 }

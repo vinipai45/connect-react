@@ -316,6 +316,81 @@ class UserDB {
         }
     }
 
+    async getConnectionCount(id) {
+        try {
+
+            if (!firebase) {
+                return false
+            }
+
+            const followersSnapshot = await firebase
+                .firestore()
+                .collection(FOLLOWERS)
+                .doc(id)
+                .get()
+
+            const followingSnapshot = await firebase
+                .firestore()
+                .collection(FOLLOWING)
+                .doc(id)
+                .get()
+
+            return {
+                following: followingSnapshot.data(),
+                followers: followersSnapshot.data()
+            }
+
+
+        } catch (err) {
+            console.log('UserDB --> getFollowerCount', err)
+        }
+    }
+
+    async getFollowersDetails(id) {
+        try {
+            if (!firebase) {
+                return false
+            }
+
+            const snapshot = await firebase
+                .firestore()
+                .collection(FOLLOWERS)
+                .doc(id)
+                .get()
+
+            if (snapshot.data()) {
+                let res = await this.getMultipleUsers(snapshot.data().users)
+
+                return res
+            }
+
+        } catch (err) {
+            console.log('UserDB --> getFollowersDetails', err)
+        }
+    }
+    async getFollowingDetails(id) {
+        try {
+            if (!firebase) {
+                return false
+            }
+
+            const snapshot = await firebase
+                .firestore()
+                .collection(FOLLOWING)
+                .doc(id)
+                .get()
+
+            if (snapshot.data()) {
+                let res = await this.getMultipleUsers(snapshot.data().users)
+
+                return res
+            }
+
+        } catch (err) {
+            console.log('UserDB --> getFollowingDetails', err)
+        }
+    }
+
 
 }
 

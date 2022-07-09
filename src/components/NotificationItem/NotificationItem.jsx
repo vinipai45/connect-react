@@ -13,9 +13,9 @@ const NotificationItem = ({ item, handleAcceptRequest, handleRejectRequest }) =>
 
 
     return (
-        <Box sx={{ display: 'flex' }} className="_search_item_container">
+        <Box sx={{ display: 'flex' }} className="_notification_item_container">
             <LazyLoadImage
-                className='_search_item_img'
+                className='_notification_item_img'
                 src={item?.avatar}// use normal <img> attributes as props
                 alt="alt"
                 effect="blur"

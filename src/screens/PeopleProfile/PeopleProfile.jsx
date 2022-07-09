@@ -102,7 +102,6 @@ const PeopleProfile = () => {
                 await userDB.unfollow(reduxUser.id, user.id)
             }
 
-
             result = await checkFollowStatus(reduxUser, user)
 
         } catch (err) {

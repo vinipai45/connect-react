@@ -12,6 +12,7 @@ import Test from './screens/Test/Test';
 import Profile from './screens/Profile/Profile';
 import Home from './screens/Home/Home';
 import Search from './screens/Search/Search';
+import Connections from './screens/Connections/Connections';
 import Notifications from './screens/Notifications/Notifications';
 import PeopleProfile from './screens/PeopleProfile/PeopleProfile';
 
@@ -32,6 +33,7 @@ function App() {
           } >
             <Route exact path="/profile" element={<Profile />} />
             <Route exact path="/profile/:username" element={<PeopleProfile />} />
+            <Route exact path="/profile/:username/connections" element={<Connections />} />
             <Route path="/home" element={<Home />} />
             <Route path="/search" element={<Search />} />
             <Route path="/notifications" element={<Notifications />} />

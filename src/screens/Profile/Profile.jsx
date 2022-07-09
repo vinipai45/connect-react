@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -28,6 +28,7 @@ const Profile = () => {
   const { uid } = JSON.parse(localStorage.getItem(auth_user))
 
   let storage = firebase.storage()
+  let navigate = useNavigate()
 
   let Toast = useSelector((s) => s.toast);
   let reduxUser = useSelector((s) => s.user.initial);
@@ -62,9 +63,30 @@ const Profile = () => {
     setActive('profile')
   }, [])
 
-  useEffect(() => {
-    setUser(reduxUser)
+  useEffect(async () => {
+    if (reduxUser?.username) {
+      let temp = {}
+      let connectionCount = await userDB.getConnectionCount(reduxUser.id)
+      let following = connectionCount?.following ? connectionCount.following.users?.length : 0
+      let followers = connectionCount?.followers ? connectionCount.followers.users?.length : 0
+      temp = {
+        ...reduxUser,
+        following,
+        followers
+      }
+
+      setUser(temp)
+
+    }
   }, [reduxUser])
+
+  const handleFollowerList = () => {
+    navigate(`/profile/${user.username}/connections?section=followers`)
+  }
+
+  const handleFollowingList = () => {
+    navigate(`/profile/${user.username}/connections?section=following`)
+  }
 
   const handleUpdate = async () => {
     try {
@@ -157,7 +179,6 @@ const Profile = () => {
 
   const storeAvatarToFirestore = (image) => {
     try {
-      console.log(image)
 
       storage.ref(`/avatar/${uid}`).put(image)
         .on(
@@ -265,22 +286,29 @@ const Profile = () => {
 
         <Box sx={{ display: 'flex' }}>
 
-          <Typography sx={{
-            fontSize: '16px',
-            "&:hover": {
-              cursor: 'pointer',
-              textDecoration: 'underline'
-            },
-          }}> <b>60</b>  Following
+          <Typography
+            onClick={handleFollowingList}
+            sx={{
+              fontSize: '16px',
+              "&:hover": {
+                cursor: 'pointer',
+                textDecoration: 'underline'
+              },
+            }}>
+            <b>{user?.following}</b>  Following
           </Typography>
 
-          <Typography sx={{
-            fontSize: '16px',
-            "&:hover": {
-              cursor: 'pointer',
-              textDecoration: 'underline'
-            },
-          }} ml={2}><b>73</b> Follower
+          <Typography
+            onClick={handleFollowerList}
+            sx={{
+              fontSize: '16px',
+              "&:hover": {
+                cursor: 'pointer',
+                textDecoration: 'underline'
+              },
+            }}
+            ml={2}>
+            <b>{user?.followers}</b> Followers
           </Typography>
         </Box>
 
