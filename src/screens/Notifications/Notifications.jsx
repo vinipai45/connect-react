@@ -10,6 +10,7 @@ import { Box, Typography } from '@mui/material';
 import NotificationItem from '../../components/NotificationItem/NotificationItem';
 
 import UserDB from '../../services/UserDB/UserDB';
+import { mobileBreakpoint } from '../../utils/constants';
 
 const Notifications = () => {
 
@@ -111,7 +112,11 @@ const Notifications = () => {
                     paddingRight: width < 1200 ? 0 : '20%',
                 }}
             >
-                <TopBar title="Notifications" />
+                {
+                    width > mobileBreakpoint ?
+                        <TopBar title="Notifications" />
+                        : <></>
+                }
 
 
                 {

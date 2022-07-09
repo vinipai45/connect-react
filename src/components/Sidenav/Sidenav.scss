@@ -4,6 +4,8 @@
     width: 250px;
     padding: 20px 20px;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
     // margin: 0 auto auto auto;
     // box-shadow: 5px 0 5px 0px $lightGrey;
 }
@@ -12,6 +14,8 @@
     width: 100px;
     padding: 20px 20px;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
 
     @media (max-width:'480px') {
         height: auto;

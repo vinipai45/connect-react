@@ -12,6 +12,7 @@ import images from '../../utils/helper-functions/images'
 import './Search.scss'
 
 import UserDB from '../../services/UserDB/UserDB';
+import { mobileBreakpoint } from '../../utils/constants';
 
 const Search = () => {
 
@@ -74,7 +75,11 @@ const Search = () => {
                     paddingRight: width < 1200 ? 0 : '20%',
                 }}
             >
-                <TopBar title="Search" />
+                {
+                    width > mobileBreakpoint ?
+                        <TopBar title="Search" />
+                        : <></>
+                }
                 <Box style={{ margin: '20px' }}>
                     <SearchBar
                         searchText={searchText}

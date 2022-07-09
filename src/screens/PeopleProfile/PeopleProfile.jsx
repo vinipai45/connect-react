@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import TopBar from '../../components/TopBar/TopBar'
 
-import { FOLLOW_STATUS, tabBreakpoint } from '../../utils/constants'
+import { FOLLOW_STATUS, mobileBreakpoint, tabBreakpoint } from '../../utils/constants'
 import UserDB from '../../services/UserDB/UserDB';
 
 import './PeopleProfile.scss'
@@ -116,9 +116,13 @@ const PeopleProfile = () => {
                 paddingRight: width < 1200 ? 0 : '20%',
             }}
         >
-            <TopBar title={user?.name ? user?.name : "Back To Home"}
-                onBackClick={() => { navigate('/search') }}
-            />
+            {
+                width > mobileBreakpoint ?
+                    <TopBar title={user?.name ? user?.name : "Back To Home"}
+                        onBackClick={() => { navigate('/search') }}
+                    />
+                    : <></>
+            }
 
             <Box sx={{
                 width: '100%',

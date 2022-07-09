@@ -31,26 +31,26 @@ const sideMenuItems = [
         key: "messages",
         icon: <ChatBubbleOutlineIcon className="_sidenav_icon" />
     },
-    {
-        label: "Bookmarks",
-        key: "bookmarks",
-        icon: <BookmarkBorderIcon className="_sidenav_icon" />
-    },
-    {
-        label: "Lists",
-        key: "lists",
-        icon: <FormatListBulletedIcon className="_sidenav_icon" />
-    },
+    // {
+    //     label: "Bookmarks",
+    //     key: "bookmarks",
+    //     icon: <BookmarkBorderIcon className="_sidenav_icon" />
+    // },
+    // {
+    //     label: "Lists",
+    //     key: "lists",
+    //     icon: <FormatListBulletedIcon className="_sidenav_icon" />
+    // },
     {
         label: "Profile",
         key: "profile",
         icon: <PermIdentityIcon className="_sidenav_icon" />
     },
-    {
-        label: "More",
-        key: "more",
-        icon: <MoreHorizIcon className="_sidenav_icon" />
-    },
+    // {
+    //     label: "More",
+    //     key: "more",
+    //     icon: <MoreHorizIcon className="_sidenav_icon" />
+    // },
 ]
 
 const bottomNavItems = [

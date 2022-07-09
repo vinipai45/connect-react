@@ -18,7 +18,7 @@ import './Profile.scss'
 import colors from '../../utils/_colors.scss';
 import { firebase } from '../../services/firebase'
 import UserDB from '../../services/UserDB/UserDB';
-import { auth_user, tabBreakpoint } from '../../utils/constants'
+import { auth_user, mobileBreakpoint, tabBreakpoint } from '../../utils/constants'
 import { validateUpdateProfileInputs } from '../../validations/updateprofile.validations';
 import { firebaseExceptionHandler } from '../../services/FirebaseExceptionHandler';
 import { urltoFile } from '../../utils/helper-functions/converters';
@@ -217,7 +217,11 @@ const Profile = () => {
         paddingRight: width < 1200 ? 0 : '20%',
       }}
     >
-      <TopBar title={user?.name} />
+      {
+        width > mobileBreakpoint ?
+          <TopBar title={user?.name} />
+          : <></>
+      }
       <Box sx={{
         width: '100%',
         height: '25%',
@@ -230,7 +234,7 @@ const Profile = () => {
           src={user?.avatar} // use normal <img> attributes as props
           alt="alt"
           effect="blur"
-          style={{
+          style={width > mobileBreakpoint ? {
             border: `1px solid ${colors.white}`,
             background: `${colors.white}`,
             borderRadius: '50%',
@@ -238,6 +242,15 @@ const Profile = () => {
             marginLeft: '20px',
             width: '130px',
             height: '130px',
+            objectFit: 'cover',
+          } : {
+            border: `1px solid ${colors.white}`,
+            background: `${colors.white}`,
+            borderRadius: '50%',
+            marginTop: '-40px',
+            marginLeft: '20px',
+            width: '80px',
+            height: '80px',
             objectFit: 'cover',
           }}
         />
