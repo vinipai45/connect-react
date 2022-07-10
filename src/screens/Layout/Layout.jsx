@@ -7,6 +7,7 @@ import CreateIcon from '@mui/icons-material/Create';
 
 import AppDrawer from '../../components/AppDrawer/AppDrawer';
 import BottomNav from '../../components/BottomNav/BottomNav';
+import MobileTopBar from '../../components/MobileTopBar/MobileTopBar';
 import { Sidenav, SidenavMini } from '../../components/Sidenav/Sidenav'
 
 import { tabBreakpoint, mobileBreakpoint, auth_user } from '../../utils/constants';
@@ -16,7 +17,6 @@ import colors from '../../utils/_colors.scss';
 // import { useNavigate } from 'react-router-dom'
 
 import './Layout.scss'
-import MobileTopBar from '../../components/MobileTopBar/MobileTopBar';
 
 const Layout = () => {
     let navigate = useNavigate()
@@ -95,9 +95,9 @@ const Layout = () => {
                             <></>
                             :
                             width < tabBreakpoint ?
-                                <SidenavMini active={active} setActive={setActive} />
+                                <SidenavMini active={active} setActive={setActive} width={width} />
                                 :
-                                <Sidenav active={active} setActive={setActive} />
+                                <Sidenav active={active} setActive={setActive} width={width} />
 
                     }
                 </div>

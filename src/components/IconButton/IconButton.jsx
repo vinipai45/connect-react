@@ -9,7 +9,7 @@ const IconButton = ({ textColor, type, fontSize, textCapital, backgroundColor, h
         fontWeight: 'bolder',
         color: textColor,
         backgroundColor: backgroundColor,
-        textTransform: textCapital ? 'uppercase' : 'lowercase',
+        textTransform: textCapital ? 'capitalize' : 'lowercase',
         width: "100%",
         '&:hover': {
             backgroundColor: hoverBackgroundColor,
