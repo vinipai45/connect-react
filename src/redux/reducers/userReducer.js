@@ -10,7 +10,9 @@ const init = {
         username: "",
         bio: "",
         gender: "",
-        role: ""
+        role: "",
+        followers: 0,
+        following: 0,
     }
 }
 

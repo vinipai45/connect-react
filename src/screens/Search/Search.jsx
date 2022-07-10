@@ -103,7 +103,7 @@ const Search = () => {
                         </Box>
 
                         :
-                        <Box style={{ margin: '20px' }}>
+                        <Box >
                             <img style={{ overflow: 'hidden', width: '100%' }} src={images.search_isometric} alt="no result svg" />
                         </Box>
                 }

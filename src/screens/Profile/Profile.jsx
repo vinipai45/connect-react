@@ -65,18 +65,7 @@ const Profile = () => {
 
   useEffect(async () => {
     if (reduxUser?.username) {
-      let temp = {}
-      let connectionCount = await userDB.getConnectionCount(reduxUser.id)
-      let following = connectionCount?.following ? connectionCount.following.users?.length : 0
-      let followers = connectionCount?.followers ? connectionCount.followers.users?.length : 0
-      temp = {
-        ...reduxUser,
-        following,
-        followers
-      }
-
-      setUser(temp)
-
+      setUser(reduxUser)
     }
   }, [reduxUser])
 

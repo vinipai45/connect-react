@@ -68,6 +68,9 @@ const bottomNavItems = [
         label: "Home",
         key: "home",
         icon: <IconButton size="large">
+            <HomeOutlinedIcon className="_bottom_nav_icon" />
+        </IconButton>,
+        activeIcon: <IconButton size="large">
             <HomeIcon className="_bottom_nav_icon" />
         </IconButton>
     },
@@ -76,6 +79,9 @@ const bottomNavItems = [
         key: "search",
         icon: <IconButton size="large">
             <SearchIcon className="_bottom_nav_icon" />
+        </IconButton>,
+        activeIcon: <IconButton size="large">
+            <SavedSearchOutlinedIcon className="_bottom_nav_icon" />
         </IconButton>
     },
     {
@@ -83,6 +89,9 @@ const bottomNavItems = [
         key: "notifications",
         icon: <IconButton size="large">
             <NotificationsNoneIcon className="_bottom_nav_icon" />
+        </IconButton>,
+        activeIcon: <IconButton size="large">
+            <NotificationsIcon className="_bottom_nav_icon" />
         </IconButton>
     },
     // {
@@ -107,6 +116,9 @@ const bottomNavItems = [
         key: "profile",
         icon: <IconButton size="large">
             <PermIdentityIcon className="_bottom_nav_icon" />
+        </IconButton>,
+        activeIcon: <IconButton size="large">
+            <PersonIcon className="_bottom_nav_icon" />
         </IconButton>
     },
     // {

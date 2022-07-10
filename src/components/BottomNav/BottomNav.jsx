@@ -23,7 +23,7 @@ const BottomNav = ({ active, setActive }) => {
                         className={
                             active === item.key ? '_bottom_nav_active_item' : ''
                         }
-                        Icon={item.icon}
+                        Icon={active === item.key ? item.activeIcon : item.icon}
                         onClick={() => {
                             handleActive(item.key)
                             navigate(`/${item.key}`)

@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Box } from '@mui/material';
-import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 
+import { Box, Fab } from '@mui/material';
+import CreateIcon from '@mui/icons-material/Create';
 
 import AppDrawer from '../../components/AppDrawer/AppDrawer';
 import BottomNav from '../../components/BottomNav/BottomNav';
 import { Sidenav, SidenavMini } from '../../components/Sidenav/Sidenav'
-import TopBar from '../../components/TopBar/TopBar';
 
 import { tabBreakpoint, mobileBreakpoint, auth_user } from '../../utils/constants';
 import { user } from '../../redux/consts';
@@ -18,6 +16,7 @@ import colors from '../../utils/_colors.scss';
 // import { useNavigate } from 'react-router-dom'
 
 import './Layout.scss'
+import MobileTopBar from '../../components/MobileTopBar/MobileTopBar';
 
 const Layout = () => {
     let navigate = useNavigate()
@@ -28,7 +27,6 @@ const Layout = () => {
     const [openDrawer, setOpenDrawer] = useState(false)
 
     let dispatch = useDispatch()
-    let reduxUser = useSelector((s) => s.user.initial);
 
     useEffect(() => {
         async function initSetup() {
@@ -50,12 +48,16 @@ const Layout = () => {
         let userDB = new UserDB()
         const { uid } = JSON.parse(localStorage.getItem(auth_user))
         let userDetails = await userDB.getById(uid)
+        let connectionCount = await userDB.getConnectionCount(uid)
+
+        let following = connectionCount?.following ? connectionCount.following.users?.length : 0
+        let followers = connectionCount?.followers ? connectionCount.followers.users?.length : 0
 
         if (userDetails) {
             dispatch({
                 type: user,
                 payLoad: {
-                    initial: { ...userDetails }
+                    initial: { ...userDetails, followers, following }
                 },
             });
         } else {
@@ -77,29 +79,7 @@ const Layout = () => {
                             <AppDrawer open={openDrawer} setOpen={setOpenDrawer} />
                             {
                                 active != 'profile' ?
-                                    <TopBar
-                                        startIcon={
-                                            <Box sx={{
-                                                marginTop: 'auto',
-                                                display: 'flex',
-                                                cursor: 'pointer'
-                                            }}
-                                                onClick={handleOpenDrawer}
-                                            >
-                                                <LazyLoadImage
-                                                    src={reduxUser?.avatar}
-                                                    effect='blur'
-                                                    alt='alt'
-                                                    style={{
-                                                        width: 40,
-                                                        height: 40,
-                                                        borderRadius: '50%',
-                                                    }}
-                                                />
-                                            </Box>
-                                        }
-                                        endIcon={<MailOutlinedIcon />}
-                                    />
+                                    <MobileTopBar handleOpenDrawer={handleOpenDrawer} />
                                     : <></>
                             }
                         </> : <></>
@@ -132,6 +112,22 @@ const Layout = () => {
                             <BottomNav active={active} setActive={setActive} /> : <></>
                     }
                 </div>
+                {
+                    width <= tabBreakpoint ?
+                        active == 'home' ?
+                            <Box sx={{
+                                position: 'absolute',
+                                right: 10,
+                                bottom: width <= mobileBreakpoint ? 90 : 20
+
+                            }}>
+                                <Fab color="secondary" aria-label="edit">
+                                    <CreateIcon />
+                                </Fab>
+                            </Box> : <></>
+                        : <></>
+                }
+
 
 
 
