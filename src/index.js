@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
+import { BrowserRouter } from 'react-router-dom';
 
 import state from './redux/store';
 import { Provider } from 'react-redux';
@@ -35,7 +36,9 @@ ReactDOM.render(
     <Provider store={state}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </ThemeProvider>
     </Provider>
   </>

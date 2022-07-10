@@ -1,20 +1,25 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import { Box, Typography, IconButton as MuiIconButton } from '@mui/material'
 
 import SidenavLink from '../SidenavLink/SidenavLink'
-import { sideMenuItems } from '../../utils/side-menu-items'
-
-import { Box, Typography } from '@mui/material'
+import IconButton from '../IconButton/IconButton'
 
 import './Sidenav.scss'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
+import colors from '../../utils/_colors.scss'
+import { sideMenuItems } from '../../utils/side-menu-items'
+import Logo from '../../assets/logo-primary.svg'
 
-const Sidenav = ({ active, setActive }) => {
+
+
+const Sidenav = ({ active, setActive, width }) => {
 
     const navigate = useNavigate()
-    let reduxUser = useSelector((s) => s.user.initial);
+    const location = useLocation();
 
+    let reduxUser = useSelector((s) => s.user.initial);
 
     const handleActive = (key) => {
         setActive(key)
@@ -22,6 +27,11 @@ const Sidenav = ({ active, setActive }) => {
 
     return (
         <div className='_sidenav'>
+            <Box sx={{ ml: 1 }}>
+                <MuiIconButton>
+                    <img src={Logo} width={30} height={30} />
+                </MuiIconButton>
+            </Box>
             {
                 sideMenuItems.map((item) => (
                     <SidenavLink
@@ -37,6 +47,18 @@ const Sidenav = ({ active, setActive }) => {
                         }} />
                 ))
             }
+            <IconButton
+                sx={{ margin: '40px auto 20px auto', borderRadius: '20px', }}
+                type="submit"
+                textColor={colors.lightGrey}
+                fontSize="18px"
+                backgroundColor={colors.primaryColor}
+                hoverBackgroundColor={colors.primaryColor}
+                textCapital
+                onClick={() => navigate('/compose/create-post', { state: { background: location } })}
+                title="Create Post"
+                variant="contained"
+            />
 
             <Box sx={{
                 marginTop: 'auto',
@@ -68,10 +90,11 @@ const Sidenav = ({ active, setActive }) => {
     )
 }
 
-const SidenavMini = ({ active, setActive }) => {
+const SidenavMini = ({ active, setActive, width }) => {
 
     const navigate = useNavigate()
     let reduxUser = useSelector((s) => s.user.initial);
+    const [showPostModal, setShowPostModal] = useState(true)
 
 
     const handleActive = (key) => {
@@ -94,6 +117,7 @@ const SidenavMini = ({ active, setActive }) => {
                         }} />
                 ))
             }
+
 
             <Box sx={{
                 marginTop: 'auto',
