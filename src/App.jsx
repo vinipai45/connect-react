@@ -14,6 +14,7 @@ import Home from './screens/Home/Home';
 import Search from './screens/Search/Search';
 import Connections from './screens/Connections/Connections';
 import Notifications from './screens/Notifications/Notifications';
+import Messages from './screens/Messages/Messages';
 import PeopleProfile from './screens/PeopleProfile/PeopleProfile';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -37,6 +38,8 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/search" element={<Search />} />
             <Route path="/notifications" element={<Notifications />} />
+            <Route path="/messages" element={<Messages />} />
+
 
           </Route>
 

@@ -217,11 +217,8 @@ const Profile = () => {
         paddingRight: width < 1200 ? 0 : '20%',
       }}
     >
-      {
-        width > mobileBreakpoint ?
-          <TopBar title={user?.name} />
-          : <></>
-      }
+      <TopBar title={user?.name} />
+
       <Box sx={{
         width: '100%',
         height: '25%',

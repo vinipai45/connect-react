@@ -30,9 +30,11 @@ const TopBar = ({ title, style, onBackClick, startIcon, endIcon }) => {
                     textTransform: 'capitalize'
                 }} >{title}</Typography>
                 <Box sx={{ ml: 'auto' }}>
-                    {
-                        endIcon ? endIcon : <></>
-                    }
+                    <IconButton>
+                        {
+                            endIcon ? endIcon : <></>
+                        }
+                    </IconButton>
                 </Box>
 
             </Box>

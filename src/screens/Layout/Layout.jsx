@@ -1,26 +1,34 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
+import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
+
+import AppDrawer from '../../components/AppDrawer/AppDrawer';
 import BottomNav from '../../components/BottomNav/BottomNav';
 import { Sidenav, SidenavMini } from '../../components/Sidenav/Sidenav'
+import TopBar from '../../components/TopBar/TopBar';
 
 import { tabBreakpoint, mobileBreakpoint, auth_user } from '../../utils/constants';
 import { user } from '../../redux/consts';
 import UserDB from '../../services/UserDB/UserDB';
+import colors from '../../utils/_colors.scss';
 // import { useNavigate } from 'react-router-dom'
 
 import './Layout.scss'
-import colors from '../../utils/_colors.scss';
 
 const Layout = () => {
     let navigate = useNavigate()
 
     const [active, setActive] = useState('home')
-    const [width, setWidth] = React.useState(window.innerWidth);
-    const [height, setHeight] = React.useState(window.innerHeight);
+    const [width, setWidth] = useState(window.innerWidth);
+    const [height, setHeight] = useState(window.innerHeight);
+    const [openDrawer, setOpenDrawer] = useState(false)
 
     let dispatch = useDispatch()
+    let reduxUser = useSelector((s) => s.user.initial);
 
     useEffect(() => {
         async function initSetup() {
@@ -55,10 +63,47 @@ const Layout = () => {
         }
     }
 
+    const handleOpenDrawer = () => {
+        setOpenDrawer(true)
+    }
+
 
     return (
         <>
             <div className='_main_container'>
+                {
+                    width < mobileBreakpoint ?
+                        <>
+                            <AppDrawer open={openDrawer} setOpen={setOpenDrawer} />
+                            {
+                                active != 'profile' ?
+                                    <TopBar
+                                        startIcon={
+                                            <Box sx={{
+                                                marginTop: 'auto',
+                                                display: 'flex',
+                                                cursor: 'pointer'
+                                            }}
+                                                onClick={handleOpenDrawer}
+                                            >
+                                                <LazyLoadImage
+                                                    src={reduxUser?.avatar}
+                                                    effect='blur'
+                                                    alt='alt'
+                                                    style={{
+                                                        width: 40,
+                                                        height: 40,
+                                                        borderRadius: '50%',
+                                                    }}
+                                                />
+                                            </Box>
+                                        }
+                                        endIcon={<MailOutlinedIcon />}
+                                    />
+                                    : <></>
+                            }
+                        </> : <></>
+                }
                 <div style={{
                     width: width > tabBreakpoint ? '25%' : 'auto',
                     display: 'flex',
@@ -76,7 +121,6 @@ const Layout = () => {
 
                     }
                 </div>
-
                 <div style={{
                     height: '100%',
                     width: '100%',

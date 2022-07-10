@@ -1,11 +1,16 @@
 import HomeIcon from '@mui/icons-material/Home';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import SearchIcon from '@mui/icons-material/Search';
+import SavedSearchOutlinedIcon from '@mui/icons-material/SavedSearchOutlined';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import ChatIcon from '@mui/icons-material/Chat';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import PersonIcon from '@mui/icons-material/Person';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import SearchIcon from '@mui/icons-material/Search';
 import { IconButton } from '@mui/material';
 
 import '../components/SidenavLink/SidenavLink.scss'
@@ -14,22 +19,26 @@ const sideMenuItems = [
     {
         label: "Home",
         key: "home",
-        icon: <HomeIcon className="_sidenav_icon" />
+        icon: <HomeOutlinedIcon className="_sidenav_icon" />,
+        activeIcon: <HomeIcon className="_sidenav_icon" />,
     },
     {
         label: "Search",
         key: "search",
-        icon: <SearchIcon className="_sidenav_icon" />
+        icon: <SearchIcon className="_sidenav_icon" />,
+        activeIcon: <SavedSearchOutlinedIcon className="_sidenav_icon" />
     },
     {
         label: "Notifications",
         key: "notifications",
-        icon: <NotificationsNoneIcon className="_sidenav_icon" />
+        icon: <NotificationsNoneIcon className="_sidenav_icon" />,
+        activeIcon: <NotificationsIcon className="_sidenav_icon" />,
     },
     {
         label: "Messages",
         key: "messages",
-        icon: <ChatBubbleOutlineIcon className="_sidenav_icon" />
+        icon: <ChatBubbleOutlineIcon className="_sidenav_icon" />,
+        activeIcon: <ChatIcon className="_sidenav_icon" />,
     },
     // {
     //     label: "Bookmarks",
@@ -44,7 +53,8 @@ const sideMenuItems = [
     {
         label: "Profile",
         key: "profile",
-        icon: <PermIdentityIcon className="_sidenav_icon" />
+        icon: <PermIdentityIcon className="_sidenav_icon" />,
+        activeIcon: <PersonIcon className="_sidenav_icon" />,
     },
     // {
     //     label: "More",

@@ -4,11 +4,17 @@
 
     // color: $secondary;
     transition: color 100ms ease-out;
-    background-color: $primary_fade;
+    // background-color: $primary_fade;
 
     h2 {
-        font-weight: bold !important;
+        font-weight: 900 !important;
     }
+
+}
+
+._sidenav_mini_active_item {
+    transition: color 100ms ease-out;
+    background-color: $primary_fade;
 
 }
 
@@ -23,13 +29,13 @@
     &:hover {
         // background-color: #e8f5fe;
         // color: #50b7f5;
-        background-color: $primary_fade;
+        background-color: $lightGrey;
         // color: $secondary;
         transition: color 100ms ease-out;
 
         h2 {
 
-            font-weight: 700;
+            // font-weight: 700;
         }
     }
 
